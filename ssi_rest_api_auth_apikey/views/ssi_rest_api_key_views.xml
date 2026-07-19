@@ -21,18 +21,6 @@
                     string="Inactive"
                     domain="[('active', '=', False)]"
                 />
-                <group name="group_by" string="Group By">
-                    <filter
-                        name="groupby_user"
-                        string="User"
-                        context="{'group_by': 'user_id'}"
-                    />
-                    <filter
-                        name="groupby_profile"
-                        string="Access Profile"
-                        context="{'group_by': 'profile_id'}"
-                    />
-                </group>
             </search>
         </field>
     </record>
