@@ -68,19 +68,11 @@ class SsiRestAuthOauth2TestController(http.Controller):
 class TestSsiRestAuthOauth2(HttpCase):
     def setUp(self):
         super().setUp()
-        # Core's own `bearer` scheme (Authorization: Bearer <opaque
-        # value>, no shape of its own) is active by default and would
-        # otherwise also extract every access token issued below, turning
-        # every protected-resource request into 400 multiple_credentials
-        # -- see models/ssi_rest_auth_oauth2.py's module docstring for why
-        # this is the accepted, deployment-level resolution (same as
-        # ssi_rest_api_auth_jwt's own tests would need to do).
-        bearer_scheme = self.env.ref(
-            "ssi_rest_api.ssi_rest_auth_scheme_bearer", raise_if_not_found=False
-        )
-        if bearer_scheme:
-            bearer_scheme.sudo().write({"active": False})
-
+        # Core's own `bearer` scheme stays active on purpose here (unlike
+        # an earlier version of this test): models/ssi_rest_auth_oauth2.py's
+        # own TOKEN_PREFIX shape check is what keeps the two schemes from
+        # colliding, so leaving bearer active is itself part of what this
+        # test class proves.
         self.resource_owner = self.env["res.users"].create(
             {
                 "name": "OAuth2 Resource Owner",

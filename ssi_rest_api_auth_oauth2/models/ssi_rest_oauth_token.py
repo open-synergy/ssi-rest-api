@@ -33,9 +33,15 @@ from odoo import api, fields, models
 #: ssi_rest_oauth_client.client_secret_hash.
 _CRYPT_CONTEXT = CryptContext(schemes=["pbkdf2_sha512"])
 
-#: Static, non-secret prefix on every generated raw code/token value --
-#: tooling hint only, same rationale as ssi_rest_api_key's _KEY_PREFIX.
-_TOKEN_PREFIX = "sot_"
+#: Static, non-secret prefix on every generated raw code/token value.
+#: Unlike ssi_rest_api_key's own _KEY_PREFIX (a pure tooling hint), this
+#: prefix is load-bearing: ssi_rest_auth_oauth2._rest_auth_extract uses it
+#: to recognise "this Authorization: Bearer value is one of ours" *without*
+#: querying the database (the binding, cheap-and-DB-free contract every
+#: mixin.rest_authenticator._rest_auth_extract must honour) -- see that
+#: module's docstring for why this is required, not optional, given this
+#: scheme also reads the Authorization header.
+TOKEN_PREFIX = "sot_"
 
 #: Length of the plaintext lookup prefix stored in token_index. Same
 #: sizing rationale as ssi_rest_api_key._KEY_INDEX_SIZE: rare collisions,
@@ -154,7 +160,7 @@ class SsiRestOauthToken(models.Model):
         exists; the caller must hand it to the client immediately (redirect
         query string or JSON response body) and never store it itself.
         """
-        raw_value = _TOKEN_PREFIX + secrets.token_urlsafe(32)
+        raw_value = TOKEN_PREFIX + secrets.token_urlsafe(32)
         record = self.sudo().create(
             {
                 "client_id": client.id,

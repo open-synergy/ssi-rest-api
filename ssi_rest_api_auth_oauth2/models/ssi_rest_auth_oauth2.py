@@ -10,25 +10,28 @@ framework this module is functionally inspired by (see
 
 Reads the standard ``Authorization: Bearer <token>`` header -- the header
 every OAuth2 client already sends its access token on -- rather than a
-dedicated header. This deliberately overlaps with the built-in
-``ssi_rest_auth_bearer`` scheme's own indiscriminate extraction on the
-same header, exactly the situation ``ssi_rest_api_auth_jwt`` already
-documents and accepts (see that module's ``models/ssi_rest_auth_jwt.py``
-module docstring): unlike a JWT, an opaque OAuth2 access token has no
-distinguishing shape ``_rest_auth_extract`` could use to tell it apart
-from a core ``res.users.apikeys`` value without querying the database
-(forbidden -- see ``mixin.rest_authenticator._rest_auth_extract``'s own
-contract). A deployment that installs this module and does not use the
-core ``bearer`` scheme at all should deactivate that scheme's
-``ssi_rest_auth_scheme`` record to avoid the resulting
-``400 multiple_credentials`` -- an operational configuration step, not a
-code path this provider can resolve unilaterally.
+dedicated header, so it necessarily shares that header with the built-in
+``ssi_rest_auth_bearer`` scheme's own indiscriminate extraction. Unlike
+``ssi_rest_api_auth_jwt`` (which tells a JWT apart from an opaque
+``res.users.apikeys`` value by its three-segment shape),
+:meth:`_rest_auth_extract` here disambiguates the *other* way: it only
+claims a bearer value that starts with ``ssi_rest_oauth_token.TOKEN_PREFIX``
+(``"sot_"``) -- every token this module itself ever issues -- and leaves
+anything else (including a genuine core API key) for ``ssi_rest_auth_bearer``
+to claim instead. This is not optional polish: this repo's own test suite
+installs every ``ssi_rest_api*`` module together in one database (CI), so
+without this check *every* bearer-authenticated request anywhere in the
+repo -- not just this module's own -- would extract two credentials at
+once and fail as ``400 multiple_credentials``, regardless of whether the
+caller ever touches OAuth2 at all.
 """
 
 from odoo import models
 from odoo.http import request
 
 from odoo.addons.ssi_rest_api.lib.auth import RestAuthError, RestAuthResult
+
+from .ssi_rest_oauth_token import TOKEN_PREFIX
 
 _AUTH_HEADER_PREFIX = "Bearer "
 _INVALID_CREDENTIAL_MESSAGE = "Invalid, expired, or revoked access token."
@@ -47,7 +50,12 @@ class SsiRestAuthOauth2(models.AbstractModel):
         if not header or not header.startswith(_AUTH_HEADER_PREFIX):
             return None
         token = header[len(_AUTH_HEADER_PREFIX) :].strip()
-        return token or None
+        # Shape check only (cheap, no DB query) -- see module docstring:
+        # this is what keeps a core res.users.apikeys bearer value (or
+        # any other scheme's opaque token) from also being claimed here.
+        if not token or not token.startswith(TOKEN_PREFIX):
+            return None
+        return token
 
     def _rest_auth_verify(self, credential):
         # sudo(): this runs before the request's identity is known at all
