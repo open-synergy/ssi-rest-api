@@ -88,6 +88,12 @@ msgid "Bearer"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_res_config_settings__ssi_rest_api_cors_origins
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api.res_config_settings_view_form
+msgid "CORS Origins"
+msgstr ""
+
+#. module: ssi_rest_api
 #: model:ir.model.fields.selection,name:ssi_rest_api.selection__ssi_rest_access_profile_rule__operation__call
 msgid "Call"
 msgstr ""
@@ -108,6 +114,19 @@ msgstr ""
 msgid ""
 "Comma-separated HTTP methods this rule applies to (e.g. 'GET,POST'). Empty "
 "matches every method."
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_res_config_settings__ssi_rest_api_cors_origins
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api.res_config_settings_view_form
+msgid ""
+"Comma-separated list of allowed CORS origins. Empty means CORS headers are "
+"not emitted."
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model,name:ssi_rest_api.model_res_config_settings
+msgid "Config Settings"
 msgstr ""
 
 #. module: ssi_rest_api
@@ -151,6 +170,17 @@ msgid "Default Effect"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_res_config_settings__ssi_rest_api_default_page_size
+msgid "Default Page Size"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api.res_config_settings_view_form
+msgid ""
+"Default and maximum number of records returned per page on list requests."
+msgstr ""
+
+#. module: ssi_rest_api
 #: model:ir.model.fields.selection,name:ssi_rest_api.selection__ssi_rest_access_profile__default_effect__deny
 #: model:ir.model.fields.selection,name:ssi_rest_api.selection__ssi_rest_access_profile_rule__effect__deny
 msgid "Deny"
@@ -164,6 +194,7 @@ msgstr ""
 #. module: ssi_rest_api
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ir_http__display_name
 #: model:ir.model.fields,field_description:ssi_rest_api.field_mixin_rest_authenticator__display_name
+#: model:ir.model.fields,field_description:ssi_rest_api.field_res_config_settings__display_name
 #: model:ir.model.fields,field_description:ssi_rest_api.field_res_users__display_name
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile__display_name
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile_rule__display_name
@@ -204,6 +235,12 @@ msgstr ""
 msgid ""
 "Evaluation order among this profile's rules; lower runs first, first match "
 "wins. No default: every rule must state its own position explicitly."
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_res_config_settings__ssi_rest_api_expose_traceback
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api.res_config_settings_view_form
+msgid "Expose Traceback"
 msgstr ""
 
 #. module: ssi_rest_api
@@ -258,6 +295,7 @@ msgstr ""
 #. module: ssi_rest_api
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ir_http__id
 #: model:ir.model.fields,field_description:ssi_rest_api.field_mixin_rest_authenticator__id
+#: model:ir.model.fields,field_description:ssi_rest_api.field_res_config_settings__id
 #: model:ir.model.fields,field_description:ssi_rest_api.field_res_users__id
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile__id
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile_rule__id
@@ -296,6 +334,20 @@ msgstr ""
 #. module: ssi_rest_api
 #: model:ir.model.fields,help:ssi_rest_api.field_ssi_rest_access_profile__active
 msgid "Inactive profiles are ignored during request evaluation."
+msgstr ""
+
+#. module: ssi_rest_api
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api.res_config_settings_view_form
+msgid ""
+"Include the Python traceback in the REST error envelope for "
+"base.group_system callers. Keep disabled in production."
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_res_config_settings__ssi_rest_api_expose_traceback
+msgid ""
+"Include the Python traceback in the REST error envelope's details, for "
+"callers in the base.group_system group. Keep disabled in production."
 msgstr ""
 
 #. module: ssi_rest_api
@@ -349,6 +401,11 @@ msgid ""
 "* Click 'Generate Code' button to automatically assign code.\n"
 "  Sequence template must be set to perform this action\n"
 "  Only master data with '/' code will be assign automatic code"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_res_config_settings__ssi_rest_api_max_page_size
+msgid "Max Page Size"
 msgstr ""
 
 #. module: ssi_rest_api
@@ -423,6 +480,13 @@ msgid "Number of messages with delivery error"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_res_config_settings__ssi_rest_api_default_page_size
+msgid ""
+"Number of records returned per page when a list request does not specify a "
+"page size."
+msgstr ""
+
+#. module: ssi_rest_api
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile_rule__operation
 msgid "Operation"
 msgstr ""
@@ -430,6 +494,11 @@ msgstr ""
 #. module: ssi_rest_api
 #: model:ir.model.fields,help:ssi_rest_api.field_ssi_rest_access_profile_rule__operation
 msgid "Operation this rule applies to."
+msgstr ""
+
+#. module: ssi_rest_api
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api.res_config_settings_view_form
+msgid "Page Size"
 msgstr ""
 
 #. module: ssi_rest_api
@@ -450,6 +519,7 @@ msgstr ""
 #. module: ssi_rest_api
 #: model:ir.module.category,name:ssi_rest_api.ssi_rest_api_module_category
 #: model:ir.ui.menu,name:ssi_rest_api.menu_ssi_rest_api_root
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api.res_config_settings_view_form
 #: model_terms:ir.ui.view,arch_db:ssi_rest_api.view_users_form_ssi_rest_api
 msgid "REST API"
 msgstr ""
@@ -579,6 +649,13 @@ msgstr ""
 #. module: ssi_rest_api
 #: model:ir.model.fields.selection,name:ssi_rest_api.selection__ssi_rest_access_profile_rule__operation__unlink
 msgid "Unlink"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_res_config_settings__ssi_rest_api_max_page_size
+msgid ""
+"Upper bound a client can request for page size, regardless of what it asks "
+"for."
 msgstr ""
 
 #. module: ssi_rest_api
