@@ -123,9 +123,7 @@ class SsiRestEndpointController(http.Controller):
             limit=1,
         )
         if not endpoint:
-            raise RestAuthError(
-                "missing_record", "Endpoint not found.", status=404
-            )
+            raise RestAuthError("missing_record", "Endpoint not found.", status=404)
         if not endpoint._check_rest_access(request.env.user):
             # Deliberately generic, matching
             # `SsiRestDispatcher._ACCESS_DENIED_MESSAGE`: the matched
@@ -135,7 +133,7 @@ class SsiRestEndpointController(http.Controller):
         if endpoint.handler_type == "model_method":
             result = _helpers.run_model_method(request.env, endpoint, ids, kwargs)
         else:
-            result = _helpers.run_server_action(endpoint, ids)
+            result = _helpers.run_server_action(request.env, endpoint, ids)
 
         if isinstance(result, models.BaseModel):
             result = result.ids

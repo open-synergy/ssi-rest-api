@@ -75,9 +75,7 @@ class TestSsiRestApiEndpoint(HttpCase):
                 "server_action_id": action.id,
             }
         )
-        response = self.url_open(
-            f"/api/v1/x/{endpoint.path}", headers=self._headers()
-        )
+        response = self.url_open(f"/api/v1/x/{endpoint.path}", headers=self._headers())
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["result"], {"greeting": "hello"})
 
@@ -306,8 +304,6 @@ class TestSsiRestApiEndpoint(HttpCase):
             routing = getattr(rule.endpoint, "routing", None)
             if not routing or routing.get("type") != "ssi_rest":
                 continue
-            if any(
-                "/x/<path:subpath>" in route for route in routing.get("routes", [])
-            ):
+            if any("/x/<path:subpath>" in route for route in routing.get("routes", [])):
                 matches.append(rule)
         self.assertEqual(len(matches), 1)

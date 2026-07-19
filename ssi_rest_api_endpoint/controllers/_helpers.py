@@ -52,15 +52,27 @@ def run_model_method(env, endpoint, ids, kwargs):
     """Run ``endpoint``'s ``model_method`` handler and return its raw
     result (the caller normalizes a recordset result to ids).
 
-    ``target`` is ``env[endpoint.model_id.model]`` — a bare (empty)
-    recordset, the same shape ``ssi_rest_api_orm``'s ``orm_call`` passes
-    to ``get_public_method`` before browsing ``ids`` onto it. Whitelisting
+    ``target`` is a bare (empty) recordset on the resolved model, the
+    same shape ``ssi_rest_api_orm``'s ``orm_call`` passes to
+    ``get_public_method`` before browsing ``ids`` onto it. Whitelisting
     happens here, not at endpoint create/write time: ``model_id`` is a
     valid ``ir.model`` by construction (a real ``Many2one``), but
     ``method_name`` is free text and is only ever resolved against the
     live method whitelist at call time.
+
+    ``endpoint._get_target_model_name()`` (``models/ssi_rest_endpoint.py``)
+    resolves ``model_id`` to its technical name via raw SQL rather than
+    ``model_id.model``: ``ir.model`` is itself ``base.group_system``-only
+    (same class of gate as ``ir.actions.server``, see
+    ``run_server_action`` below), so the ORM path would raise
+    ``AccessError`` for any caller without that group.
     """
-    target = env[endpoint.model_id.model]
+    model_name = endpoint._get_target_model_name()
+    if not model_name:
+        raise RestAuthError(
+            "missing_record", "Endpoint's target model no longer exists.", status=404
+        )
+    target = env[model_name]
     try:
         func = get_public_method(target, endpoint.method_name)
     except AttributeError as exc:
@@ -69,7 +81,7 @@ def run_model_method(env, endpoint, ids, kwargs):
     return func(records, **kwargs)
 
 
-def run_server_action(endpoint, ids):
+def run_server_action(env, endpoint, ids):
     """Run ``endpoint``'s ``server_action`` handler and return its raw
     result.
 
@@ -78,14 +90,30 @@ def run_server_action(endpoint, ids):
     shape the Odoo UI itself sets before running a server action bound to
     a record — only when the action actually targets a model; an
     unbound/global server action runs with no such context.
+
+    ``action.model_id``'s technical model name is read via one raw SQL
+    join, not the ORM: both ``ir.actions.server`` and ``ir.model`` are
+    themselves ``base.group_system``-only, and ``.run()`` below only
+    works around that by ``sudo()``-ing itself internally (core,
+    ``ir_actions.py``'s ``IrActionsServer.run()``) — this module's own
+    code stays outside that sudo'd path entirely instead of relying on
+    it.
     """
     action = endpoint.server_action_id
     parsed_ids = parse_ids(ids)
     context = {}
-    if parsed_ids and action.model_id:
-        context.update(
-            active_model=action.model_id.model,
-            active_ids=parsed_ids,
-            active_id=parsed_ids[0],
+    if parsed_ids:
+        env.cr.execute(
+            "SELECT m.model FROM ir_act_server a "
+            "JOIN ir_model m ON m.id = a.model_id "
+            "WHERE a.id = %s",
+            (action.id,),
         )
+        row = env.cr.fetchone()
+        if row:
+            context.update(
+                active_model=row[0],
+                active_ids=parsed_ids,
+                active_id=parsed_ids[0],
+            )
     return action.with_context(**context).run()

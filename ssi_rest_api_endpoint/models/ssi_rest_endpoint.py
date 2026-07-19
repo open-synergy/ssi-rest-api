@@ -1,7 +1,7 @@
 # Copyright 2026 OpenSynergy Indonesia
 # Copyright 2026 PT. Simetri Sinergi Indonesia
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -79,7 +79,6 @@ class SsiRestEndpoint(models.Model):
         "is looked up and called on this model.",
     )
     method_name = fields.Char(
-        string="Method Name",
         help="Public method called on model_id's model when "
         "handler_type=model_method. Only methods accepted by "
         "odoo.service.model.get_public_method are ever executed at call "
@@ -129,19 +128,21 @@ class SsiRestEndpoint(models.Model):
     def _check_handler_configuration(self):
         for record in self.sudo():
             if not record._check_handler_configuration_condition():
-                error_message = """
-Document Type: %s
-Context: Create or update REST custom endpoint
-Database ID: %s
-Problem: handler_type is '%s' but the field(s) it requires are not set
-Solution: Fill model_id and method_name for handler_type=model_method, \
-or server_action_id for handler_type=server_action
-""" % (
-                    record._description,
-                    record.id,
-                    record.handler_type,
+                raise ValidationError(
+                    record.env._(
+                        "Document Type: %(document_type)s\n"
+                        "Context: Create or update REST custom endpoint\n"
+                        "Database ID: %(database_id)s\n"
+                        "Problem: handler_type is '%(handler_type)s' but "
+                        "the field(s) it requires are not set\n"
+                        "Solution: Fill model_id and method_name for "
+                        "handler_type=model_method, or server_action_id "
+                        "for handler_type=server_action",
+                        document_type=record._description,
+                        database_id=record.id,
+                        handler_type=record.handler_type,
+                    )
                 )
-                raise ValidationError(_(error_message))
 
     def _check_handler_configuration_condition(self):
         self.ensure_one()
@@ -179,8 +180,28 @@ or server_action_id for handler_type=server_action
         candidates = self.profile_ids.filtered(lambda p: p.id in applicable_ids)
         if not candidates:
             return False
-        model_name = self.model_id.model if self.model_id else None
+        model_name = self._get_target_model_name()
         return any(
             profile._evaluate_request(self.path, self.http_method, model_name, "call")
             for profile in candidates
         )
+
+    def _get_target_model_name(self):
+        """Return ``model_id``'s technical model name, or ``None``.
+
+        Read via raw SQL, not ``model_id.model``: ``ir.model`` is itself
+        ``base.group_system``-only (see ``ssi_rest_api_introspection``'s
+        tests for the same fact), and this method must remain callable by
+        any caller entitled to call the endpoint at all — the technical
+        name of a model an administrator already pointed this *config*
+        record at is not user data gated by the caller's own ACL. Never
+        ``sudo()``, per this module's binding no-sudo invariant.
+        """
+        self.ensure_one()
+        if not self.model_id:
+            return None
+        self.env.cr.execute(
+            "SELECT model FROM ir_model WHERE id = %s", (self.model_id.id,)
+        )
+        row = self.env.cr.fetchone()
+        return row[0] if row else None
