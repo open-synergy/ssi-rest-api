@@ -19,5 +19,10 @@
     ],
     "data": [
         "data/ir_config_parameter_data.xml",
+        "security/ir_module_category/ssi_rest_api.xml",
+        "security/res_groups/ssi_rest_auth_scheme.xml",
+        "security/ir_model_access/ssi_rest_auth_scheme.xml",
+        "menu.xml",
+        "views/ssi_rest_auth_scheme_views.xml",
     ],
 }

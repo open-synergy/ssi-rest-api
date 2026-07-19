@@ -184,6 +184,10 @@ class SsiRestDispatcher(Json2Dispatcher):
             request_id=request_id,
             details=details,
         )
-        return self.request.make_json_response(
-            body, headers=[(REQUEST_ID_HEADER, request_id)], status=status
-        )
+        headers = [(REQUEST_ID_HEADER, request_id)]
+        # `RestAuthError` carries e.g. `WWW-Authenticate` this way rather
+        # than through werkzeug's own `get_headers()`, which also injects a
+        # `Content-Type: text/html` meant for its HTML error page (see
+        # `RestAuthError.rest_headers` docstring in `lib/auth.py`).
+        headers.extend(getattr(exc, "rest_headers", ()))
+        return self.request.make_json_response(body, headers=headers, status=status)

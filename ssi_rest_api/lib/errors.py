@@ -31,6 +31,8 @@ from odoo.exceptions import (
     UserError,
 )
 
+from .auth import RestAuthError
+
 #: ``ir.config_parameter`` key gating traceback disclosure in the error
 #: envelope. Kept off by default (see ``data/ir_config_parameter_data.xml``);
 #: even when on, :func:`traceback_disclosure_allowed` still requires the
@@ -70,11 +72,15 @@ def classify_exception(exc):
 
     ``status`` is always ``exc.http_status`` for a recognised
     :class:`~odoo.exceptions.UserError` subclass (``422``/``403``/``404``/
-    ``409``), or ``500`` for anything else. ``message`` is the client-safe
-    text for the envelope's ``message`` key: the exception's own message for
-    every recognised code except ``access_denied`` (generic, see
-    ``_GENERIC_MESSAGES``), and always generic for ``internal_error``.
+    ``409``), ``exc.code``/``exc.error_code`` for a
+    :class:`~.auth.RestAuthError` (``401``/``400``), or ``500`` for
+    anything else. ``message`` is the client-safe text for the envelope's
+    ``message`` key: the exception's own message for every recognised code
+    except ``access_denied`` (generic, see ``_GENERIC_MESSAGES``), and
+    always generic for ``internal_error``.
     """
+    if isinstance(exc, RestAuthError):
+        return exc.code, exc.error_code, exc.description
     for exc_class, code in _EXCEPTION_CODE_MAP:
         if isinstance(exc, exc_class):
             if code in _GENERIC_MESSAGES:

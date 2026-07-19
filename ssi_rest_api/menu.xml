@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!-- Technical settings root: ssi_rest_api is not an application
+         (no web_icon, application=False in the manifest), so it attaches
+         under Settings > Technical like ssi_frequency/ssi_web_chatwoot do. -->
+    <menuitem id="menu_ssi_rest_api_root" name="REST API" parent="base.menu_custom" />
+
+    <!-- Configuration: every later backlog item's configurator model
+         (auth providers, access profile, endpoint, ...) attaches its own
+         menu here rather than creating a new Configuration submenu. -->
+    <menuitem
+        id="menu_ssi_rest_api_configuration"
+        name="Configuration"
+        parent="menu_ssi_rest_api_root"
+        sequence="99"
+    />
+</odoo>
