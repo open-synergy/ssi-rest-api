@@ -1,0 +1,144 @@
+options:
+  auto_refresh: true
+
+scenarios:
+  - name: "Create key without generating it yet"
+    steps:
+      - step: "Create access profile"
+        action: "create"
+        model: "ssi_rest_access_profile"
+        save_as: "profile"
+        values:
+          name: "YAML Test Profile Create"
+          code: "yaml_apikey_profile_create"
+      - step: "Create key"
+        action: "create"
+        model: "ssi_rest_api_key"
+        save_as: "key"
+        values:
+          name: "My Key"
+          user_id: "REC: user.id"
+          profile_id: "REC: profile.id"
+      - step: "Assert no hash/index yet"
+        action: "assert"
+        target: "key"
+        asserts:
+          key_hash:
+            type: "value"
+            operator: "is_falsy"
+          key_index:
+            type: "value"
+            operator: "is_falsy"
+          active:
+            type: "value"
+            expected: true
+
+  - name: "Generate key populates hash and index"
+    steps:
+      - step: "Create access profile"
+        action: "create"
+        model: "ssi_rest_access_profile"
+        save_as: "profile"
+        values:
+          name: "YAML Test Profile Generate"
+          code: "yaml_apikey_profile_generate"
+      - step: "Create key"
+        action: "create"
+        model: "ssi_rest_api_key"
+        save_as: "key"
+        values:
+          name: "My Key"
+          user_id: "REC: user.id"
+          profile_id: "REC: profile.id"
+      - step: "Generate key"
+        action: "call"
+        target: "key"
+        method: "action_generate_key"
+      - step: "Assert hash and index populated"
+        action: "assert"
+        target: "key"
+        asserts:
+          key_hash:
+            type: "value"
+            operator: "is_truthy"
+          key_index:
+            type: "value"
+            operator: "is_truthy"
+
+  - name: "Apikey scheme is registered on install"
+    steps:
+      - step: "Search apikey scheme"
+        action: "search"
+        model: "ssi_rest_auth_scheme"
+        domain: [["code", "=", "apikey"]]
+        save_as: "scheme"
+        expect_count: 1
+      - step: "Assert provider model"
+        action: "assert"
+        target: "scheme"
+        asserts:
+          provider_model:
+            type: "value"
+            expected: "ssi_rest_auth_apikey"
+          active:
+            type: "value"
+            expected: true
+
+  - name: "Regular user cannot write another user's key"
+    steps:
+      - step: "Create access profile"
+        action: "create"
+        model: "ssi_rest_access_profile"
+        save_as: "profile"
+        values:
+          name: "YAML Test Profile Rule"
+          code: "yaml_apikey_profile_rule"
+      - step: "Create owner user"
+        action: "create"
+        model: "res.users"
+        save_as: "owner"
+        values:
+          name: "Key Owner"
+          login: "ssi_rest_api_key_owner@example.com"
+          email: "ssi_rest_api_key_owner@example.com"
+          group_ids: [[6, 0, ["REF: base.group_user"]]]
+      - step: "Create other user"
+        action: "create"
+        model: "res.users"
+        save_as: "other"
+        values:
+          name: "Other User"
+          login: "ssi_rest_api_key_other@example.com"
+          email: "ssi_rest_api_key_other@example.com"
+          group_ids: [[6, 0, ["REF: base.group_user"]]]
+      - step: "Owner creates their own key"
+        action: "create"
+        model: "ssi_rest_api_key"
+        save_as: "key"
+        as_user: "owner"
+        values:
+          name: "Owner Key"
+          user_id: "REC: owner.id"
+          profile_id: "REC: profile.id"
+      - step: "Other user cannot find it via search"
+        action: "search"
+        model: "ssi_rest_api_key"
+        as_user: "other"
+        domain: [["id", "=", "REC: key.id"]]
+        save_as: "hidden_from_other"
+        expect_count: 0
+      - step: "Other user cannot write it"
+        action: "write"
+        target: "key"
+        as_user: "other"
+        expect_error:
+          type: "AccessError"
+        values:
+          name: "Hacked"
+      - step: "Administrator can still find owner's key"
+        action: "search"
+        model: "ssi_rest_api_key"
+        as_user: "base.user_admin"
+        domain: [["id", "=", "REC: key.id"]]
+        save_as: "visible_to_admin"
+        expect_count: 1

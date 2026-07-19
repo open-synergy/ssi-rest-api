@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="ssi_rest_api_key_view_search" model="ir.ui.view">
+        <field name="name">ssi_rest_api_key - search</field>
+        <field name="model">ssi_rest_api_key</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="user_id" />
+                <field name="profile_id" />
+                <filter
+                    name="dom_active"
+                    string="Active"
+                    domain="[('active', '=', True)]"
+                />
+                <filter
+                    name="dom_inactive"
+                    string="Inactive"
+                    domain="[('active', '=', False)]"
+                />
+            </search>
+        </field>
+    </record>
+
+    <record id="ssi_rest_api_key_view_list" model="ir.ui.view">
+        <field name="name">ssi_rest_api_key - list</field>
+        <field name="model">ssi_rest_api_key</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" />
+                <field name="user_id" />
+                <field name="profile_id" />
+                <field name="key_index" />
+                <field name="expiration_date" />
+                <field name="last_used_date" />
+                <field name="active" widget="boolean_toggle" />
+            </list>
+        </field>
+    </record>
+
+    <record id="ssi_rest_api_key_view_form" model="ir.ui.view">
+        <field name="name">ssi_rest_api_key - form</field>
+        <field name="model">ssi_rest_api_key</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button
+                        name="action_generate_key"
+                        type="object"
+                        string="Generate Key"
+                        class="oe_highlight"
+                    />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="active" widget="boolean_toggle" />
+                    </div>
+                    <group name="group_1">
+                        <field name="name" />
+                        <field name="user_id" />
+                        <field name="profile_id" />
+                        <field name="expiration_date" />
+                    </group>
+                    <group name="group_2" string="Key">
+                        <field name="key_index" readonly="1" />
+                        <field name="last_used_date" readonly="1" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ssi_rest_api_key_action" model="ir.actions.act_window">
+        <field name="name">API Key</field>
+        <field name="res_model">ssi_rest_api_key</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="ssi_rest_api_key_menu"
+        parent="ssi_rest_api.menu_ssi_rest_api_configuration"
+        action="ssi_rest_api_key_action"
+    />
+</odoo>

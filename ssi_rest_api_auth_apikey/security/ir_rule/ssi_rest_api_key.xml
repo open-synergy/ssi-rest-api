@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!-- Binding, backlog issue #18's Keputusan Desain: a regular user may
+         only see and manage keys they own; an administrator
+         (ssi_rest_api_key_group) sees every key. Both rules are
+         group-specific (never "global"/groups-empty), so they combine
+         with OR for a user in both groups, an administrator is normally
+         also an internal user, and (1,'=',1) from the admin rule then
+         dominates the narrower user_id rule, giving full access. -->
+    <record id="ssi_rest_api_key_own_rule" model="ir.rule">
+        <field name="name">REST API Key - Own</field>
+        <field name="model_id" ref="model_ssi_rest_api_key" />
+        <field name="groups" eval="[(4, ref('base.group_user'))]" />
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+
+    <record id="ssi_rest_api_key_admin_rule" model="ir.rule">
+        <field name="name">REST API Key - Administrator</field>
+        <field name="model_id" ref="model_ssi_rest_api_key" />
+        <field name="groups" eval="[(4, ref('ssi_rest_api_key_group'))]" />
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+</odoo>
