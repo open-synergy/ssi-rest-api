@@ -148,3 +148,87 @@ class IrHttp(models.AbstractModel):
         if not challenges:
             return []
         return [("WWW-Authenticate", ", ".join(challenges))]
+
+    @classmethod
+    def _pre_dispatch(cls, rule, args):
+        result = super()._pre_dispatch(rule, args)
+        # Core `_pre_dispatch` (see `super()` call above) unconditionally
+        # forces `lang=get_lang(env).code` into the context *after* calling
+        # `request.dispatcher.pre_dispatch()` — this override therefore
+        # runs its own company/lang resolution *after* `super()` returns,
+        # the only point at which a value it sets is guaranteed to survive.
+        if rule.endpoint.routing.get("type") == "ssi_rest":
+            cls._ssi_rest_resolve_company()
+            cls._ssi_rest_resolve_lang()
+        return result
+
+    @classmethod
+    def _ssi_rest_resolve_company(cls):
+        """Resolve, validate, and apply the company this request runs in.
+
+        BINDING (backlog issue #9's Keputusan Desain): this API is
+        stateless (``save_session=False``), so ``request.env.company``
+        inherited from the session means nothing here — every request
+        must resolve its own company. A requested company outside
+        ``env.user.company_ids`` is a cross-company data leak class of
+        bug, not a mere inconvenience, so it is rejected outright, never
+        silently ignored.
+        """
+        header_value = request.httprequest.headers.get("X-Odoo-Company")
+        query_value = request.httprequest.args.get("company_id")
+        raw_company = header_value if header_value is not None else query_value
+
+        user = request.env.user
+        if raw_company is None:
+            company = user.company_id
+        else:
+            try:
+                company_id = int(raw_company)
+            except (TypeError, ValueError):
+                raise RestAuthError(
+                    "validation_error",
+                    "X-Odoo-Company must be an integer company id.",
+                    status=422,
+                ) from None
+            company = request.env["res.company"].browse(company_id)
+            if not company.exists():
+                raise RestAuthError(
+                    "validation_error",
+                    "X-Odoo-Company does not reference an existing company.",
+                    status=422,
+                )
+            if company not in user.company_ids:
+                raise RestAuthError(
+                    "access_denied",
+                    "You are not allowed to access this company.",
+                    status=403,
+                )
+        # `allowed_company_ids` is what `env.company`/multi-company record
+        # rules actually key off (see `models.with_company()`, core); the
+        # requested company is set alone (not merged with the user's other
+        # allowed companies) so a request scoped to one company can never
+        # implicitly read across into another.
+        request.update_context(allowed_company_ids=[company.id])
+
+    @classmethod
+    def _ssi_rest_resolve_lang(cls):
+        """Apply the client's ``Accept-Language`` preference, if it names
+        an active installed language; otherwise leave the lang core's
+        ``_pre_dispatch`` already resolved (the user's own) untouched.
+
+        ``Accept-Language`` is a preference, not a command (binding,
+        backlog issue #9's Keputusan Desain): an unrecognised value is
+        silently ignored, never an error.
+        """
+        header_value = request.httprequest.headers.get("Accept-Language")
+        if not header_value:
+            return
+        first_tag = header_value.split(",")[0].split(";")[0].strip()
+        if not first_tag:
+            return
+        code = first_tag.replace("-", "_")
+        # No sudo(): `res.lang` is readable by base.group_public (every
+        # user, including unauthenticated ones on auth="public" routes).
+        resolved = request.env["res.lang"]._get_code(code)
+        if resolved:
+            request.update_context(lang=resolved)

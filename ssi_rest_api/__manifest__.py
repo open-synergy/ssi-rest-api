@@ -15,6 +15,7 @@
     "depends": [
         "base",
         "web",
+        "base_setup",
         "ssi_master_data_mixin",
     ],
     "data": [
@@ -28,5 +29,6 @@
         "security/ir_model_access/ssi_rest_access_profile.xml",
         "views/ssi_rest_access_profile_views.xml",
         "views/res_users_views.xml",
+        "views/res_config_settings_views.xml",
     ],
 }
