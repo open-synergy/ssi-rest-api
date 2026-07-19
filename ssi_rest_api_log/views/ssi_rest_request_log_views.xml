@@ -27,28 +27,27 @@
                     string="Succeeded"
                     domain="[('status_code', '&lt;', 400)]"
                 />
-                <group name="group_by" string="Group By">
-                    <filter
-                        name="group_by_http_method"
-                        string="HTTP Method"
-                        context="{'group_by': 'http_method'}"
-                    />
-                    <filter
-                        name="group_by_model_name"
-                        string="Model"
-                        context="{'group_by': 'model_name'}"
-                    />
-                    <filter
-                        name="group_by_status_code"
-                        string="Status Code"
-                        context="{'group_by': 'status_code'}"
-                    />
-                    <filter
-                        name="group_by_user_id"
-                        string="User"
-                        context="{'group_by': 'user_id'}"
-                    />
-                </group>
+                <separator />
+                <filter
+                    name="group_by_http_method"
+                    string="HTTP Method"
+                    context="{'group_by': 'http_method'}"
+                />
+                <filter
+                    name="group_by_model_name"
+                    string="Model"
+                    context="{'group_by': 'model_name'}"
+                />
+                <filter
+                    name="group_by_status_code"
+                    string="Status Code"
+                    context="{'group_by': 'status_code'}"
+                />
+                <filter
+                    name="group_by_user_id"
+                    string="User"
+                    context="{'group_by': 'user_id'}"
+                />
             </search>
         </field>
     </record>
