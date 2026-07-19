@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="1">
+    <!-- Whether unhandled exceptions expose their Python traceback in
+             the REST error envelope. Keep disabled by default in production. -->
+    <function
+        model="ir.config_parameter"
+        name="set_param"
+        eval="('ssi_rest_api.expose_traceback', 'False')"
+    />
+    <!-- Default number of records returned per page when a request does
+             not specify a page size. -->
+    <function
+        model="ir.config_parameter"
+        name="set_param"
+        eval="('ssi_rest_api.default_page_size', '80')"
+    />
+    <!-- Upper bound a client can request for page size, regardless of
+             what it asks for. -->
+    <function
+        model="ir.config_parameter"
+        name="set_param"
+        eval="('ssi_rest_api.max_page_size', '1000')"
+    />
+    <!-- Comma-separated list of allowed CORS origins. Empty means CORS
+             headers are not emitted. -->
+    <function
+        model="ir.config_parameter"
+        name="set_param"
+        eval="('ssi_rest_api.cors_origins', '')"
+    />
+    <!-- Number of days API request/response logs are kept before being
+             purged. -->
+    <function
+        model="ir.config_parameter"
+        name="set_param"
+        eval="('ssi_rest_api.log_retention_days', '30')"
+    />
+    <!-- Whether request/response bodies are persisted in the API log,
+             in addition to headers/metadata. Keep disabled by default. -->
+    <function
+        model="ir.config_parameter"
+        name="set_param"
+        eval="('ssi_rest_api.log_body', 'False')"
+    />
+</odoo>
