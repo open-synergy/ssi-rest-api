@@ -1,0 +1,447 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ssi_rest_api_endpoint
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ssi_rest_api_endpoint
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_endpoint.ssi_rest_endpoint_view_form
+msgid "Access"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__profile_ids
+msgid "Access Profiles"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__profile_ids
+msgid ""
+"Access profiles allowed to call this endpoint, evaluated with the same "
+"ssi_rest_access_profile mechanism the dispatcher already applies to every "
+"ssi_rest request (see _check_rest_access below) — no separate authorization "
+"path is introduced here. Empty means no endpoint-specific restriction beyond"
+" what the caller's own applicable profiles already allow."
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__active
+msgid "Active"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__activity_type_icon
+msgid "Activity Type Icon"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__code
+msgid "Code"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:res.groups,name:ssi_rest_api_endpoint.ssi_rest_endpoint_group
+msgid "Configurator"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields.selection,name:ssi_rest_api_endpoint.selection__ssi_rest_endpoint__http_method__delete
+msgid "DELETE"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#. odoo-python
+#: code:addons/ssi_rest_api_endpoint/models/ssi_rest_endpoint.py:0
+msgid ""
+"Document Type: %(document_type)s\n"
+"Context: Create or update REST custom endpoint\n"
+"Database ID: %(database_id)s\n"
+"Problem: handler_type is '%(handler_type)s' but the field(s) it requires are not set\n"
+"Solution: Fill model_id and method_name for handler_type=model_method, or server_action_id for handler_type=server_action"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_endpoint.ssi_rest_endpoint_view_form
+msgid "Endpoint"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__input_schema
+msgid ""
+"Free-form metadata describing the expected request payload shape, stored and"
+" published for API documentation/OpenAPI generation only. Not enforced "
+"against the actual request at runtime."
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__output_schema
+msgid ""
+"Free-form metadata describing the response payload shape, stored and "
+"published for API documentation/OpenAPI generation only. Not enforced "
+"against the actual response at runtime."
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields.selection,name:ssi_rest_api_endpoint.selection__ssi_rest_endpoint__http_method__get
+msgid "GET"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__http_method
+msgid ""
+"HTTP method this endpoint responds to. The same path may be registered more "
+"than once, each under a different http_method, to expose a different handler"
+" per verb."
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_endpoint.ssi_rest_endpoint_view_form
+msgid "Handler"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__handler_type
+msgid "Handler Type"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__has_message
+msgid "Has Message"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__http_method
+msgid "Http Method"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__id
+msgid "ID"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__input_schema
+msgid "Input Schema"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__active
+msgid ""
+"Master data status\n"
+"\n"
+"* Inactive data can not be selected when creating new transaction\n"
+"* Transaction with inactive master data can still be viewed\n"
+"* Set master data as inactive if master data no longer needed,\n"
+"but master data already used on transaction"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__code
+msgid ""
+"Master data unique identifier.\n"
+"\n"
+"* Fill with '/' if You do not need unique identifier\n"
+"* Click 'Generate Code' button to automatically assign code.\n"
+"  Sequence template must be set to perform this action\n"
+"  Only master data with '/' code will be assign automatic code"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__method_name
+msgid "Method Name"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__model_id
+msgid "Model"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields.selection,name:ssi_rest_api_endpoint.selection__ssi_rest_endpoint__handler_type__model_method
+msgid "Model Method"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__name
+msgid "Name"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__note
+msgid "Note"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__output_schema
+msgid "Output Schema"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields.selection,name:ssi_rest_api_endpoint.selection__ssi_rest_endpoint__http_method__patch
+msgid "PATCH"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields.selection,name:ssi_rest_api_endpoint.selection__ssi_rest_endpoint__http_method__post
+msgid "POST"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields.selection,name:ssi_rest_api_endpoint.selection__ssi_rest_endpoint__http_method__put
+msgid "PUT"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__path
+msgid "Path"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.constraint,message:ssi_rest_api_endpoint.constraint_ssi_rest_endpoint_path_uniq
+msgid "Path must be unique."
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__method_name
+msgid ""
+"Public method called on model_id's model when handler_type=model_method. "
+"Only methods accepted by odoo.service.model.get_public_method are ever "
+"executed at call time; any other method (private, unsafe attribute, ...) is "
+"rejected, never invoked."
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.actions.act_window,name:ssi_rest_api_endpoint.ssi_rest_endpoint_action
+#: model:ir.model,name:ssi_rest_api_endpoint.model_ssi_rest_endpoint
+#: model:ir.ui.menu,name:ssi_rest_api_endpoint.ssi_rest_endpoint_menu
+#: model:res.groups.privilege,name:ssi_rest_api_endpoint.res_groups_privilege_ssi_rest_endpoint
+msgid "REST Custom Endpoint"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__is_readonly
+msgid "Readonly"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_endpoint.ssi_rest_endpoint_view_form
+msgid "Route"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_endpoint.ssi_rest_endpoint_view_form
+msgid "Schema"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,field_description:ssi_rest_api_endpoint.field_ssi_rest_endpoint__server_action_id
+#: model:ir.model.fields.selection,name:ssi_rest_api_endpoint.selection__ssi_rest_endpoint__handler_type__server_action
+msgid "Server Action"
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__server_action_id
+msgid "Server action run when handler_type=server_action."
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__model_id
+msgid ""
+"Target model for handler_type=model_method: method_name is looked up and "
+"called on this model."
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__path
+msgid ""
+"URL segment matched against the wildcard route's <path:subpath> (e.g. "
+"'sales/close-quarter'), combined with http_method to look up this endpoint "
+"at call time. Must be unique across every custom endpoint, active or "
+"archived."
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__handler_type
+msgid ""
+"What runs when this endpoint is called: a whitelisted model method (model_id"
+" + method_name), or an ir.actions.server (server_action_id). Storing "
+"arbitrary Python code on a field and executing it with safe_eval is "
+"deliberately not an option here — see this module's Keputusan Desain."
+msgstr ""
+
+#. module: ssi_rest_api_endpoint
+#: model:ir.model.fields,help:ssi_rest_api_endpoint.field_ssi_rest_endpoint__is_readonly
+msgid ""
+"Whether calling this endpoint only ever reads data. Determines the readonly="
+" cursor mode the wildcard route resolves for a call to this endpoint. An "
+"endpoint that may write must never be marked readonly; leave this False when"
+" unsure."
+msgstr ""
