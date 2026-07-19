@@ -59,7 +59,9 @@ class SsiRestOrmController(http.Controller):
         operation="read",
         readonly=True,
     )
-    def orm_search(self, model, domain=None, limit=None, offset=None, order=None, **kwargs):
+    def orm_search(
+        self, model, domain=None, limit=None, offset=None, order=None, **kwargs
+    ):
         target = _helpers.resolve_model(request.env, model)
         domain = _helpers.parse_json_param(domain, [])
         limit, offset = _helpers.paginate(request.env, limit, offset)

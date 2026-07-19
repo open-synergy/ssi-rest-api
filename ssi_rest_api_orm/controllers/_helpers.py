@@ -89,7 +89,9 @@ def paginate(env, limit, offset):
     icp = env["ir.config_parameter"]
     default_page_size = int(icp._get_param(_ICP_DEFAULT_PAGE_SIZE) or 80)
     max_page_size = int(icp._get_param(_ICP_MAX_PAGE_SIZE) or 1000)
-    resolved_limit = default_page_size if limit is None else min(int(limit), max_page_size)
+    resolved_limit = (
+        default_page_size if limit is None else min(int(limit), max_page_size)
+    )
     resolved_offset = int(offset or 0)
     return resolved_limit, resolved_offset
 
@@ -103,7 +105,7 @@ def format_read_group_rows(groupby, aggregates, rows):
     formatted = []
     for row in rows:
         entry = {}
-        for spec, value in zip(specs, row):
+        for spec, value in zip(specs, row, strict=False):
             if isinstance(value, models.BaseModel):
                 entry[spec] = (
                     {"id": value.id, "display_name": value.display_name}

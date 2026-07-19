@@ -29,7 +29,20 @@ class TestSsiRestApiOrm(HttpCase):
                 "name": "ORM Test User",
                 "login": "ssi_rest_api_orm_test_user@example.com",
                 "email": "ssi_rest_api_orm_test_user@example.com",
-                "group_ids": [(6, 0, [self.env.ref("base.group_user").id])],
+                # `base.group_user` alone only grants *read* on
+                # res.partner (see base/security/ir.model.access.csv);
+                # create/write/unlink need group_partner_manager too —
+                # several tests below exercise those on purpose.
+                "group_ids": [
+                    (
+                        6,
+                        0,
+                        [
+                            self.env.ref("base.group_user").id,
+                            self.env.ref("base.group_partner_manager").id,
+                        ],
+                    )
+                ],
             }
         )
         self.rpc_key = (
@@ -103,13 +116,19 @@ class TestSsiRestApiOrm(HttpCase):
         self.assertTrue(found, "call route not found in routing map")
 
     def test_call_returning_recordset_normalizes_to_ids(self):
+        # `exists()` looks tempting for this but is `@api.private` (core,
+        # `orm/models.py`) and therefore rejected by `get_public_method`
+        # — `copy()` is a genuinely public method that also returns a
+        # recordset (a new record).
         response = self.url_open(
-            "/api/v1/orm/res.partner/call/exists",
+            "/api/v1/orm/res.partner/call/copy",
             headers=self._headers(),
             json={"ids": [self.partner.id]},
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["result"], [self.partner.id])
+        result = response.json()["result"]
+        self.assertEqual(len(result), 1)
+        self.assertNotEqual(result[0], self.partner.id)
 
     @mute_logger(_DISPATCHER_LOGGER)
     def test_call_private_method_is_rejected_not_500(self):
