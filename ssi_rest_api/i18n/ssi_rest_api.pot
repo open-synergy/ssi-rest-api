@@ -49,6 +49,16 @@ msgid "Attachment Count"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ssi_rest_auth_scheme,name:ssi_rest_api.ssi_rest_auth_scheme_basic
+msgid "Basic"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ssi_rest_auth_scheme,name:ssi_rest_api.ssi_rest_auth_scheme_bearer
+msgid "Bearer"
+msgstr ""
+
+#. module: ssi_rest_api
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_scheme__code
 msgid "Code"
 msgstr ""
@@ -82,6 +92,8 @@ msgstr ""
 #. module: ssi_rest_api
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ir_http__display_name
 #: model:ir.model.fields,field_description:ssi_rest_api.field_mixin_rest_authenticator__display_name
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_basic__display_name
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_bearer__display_name
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_scheme__display_name
 msgid "Display Name"
 msgstr ""
@@ -121,6 +133,8 @@ msgstr ""
 #. module: ssi_rest_api
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ir_http__id
 #: model:ir.model.fields,field_description:ssi_rest_api.field_mixin_rest_authenticator__id
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_basic__id
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_bearer__id
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_scheme__id
 msgid "ID"
 msgstr ""
@@ -261,6 +275,16 @@ msgstr ""
 #: model:ir.module.category,name:ssi_rest_api.ssi_rest_api_module_category
 #: model:ir.ui.menu,name:ssi_rest_api.menu_ssi_rest_api_root
 msgid "REST API"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model,name:ssi_rest_api.model_ssi_rest_auth_bearer
+msgid "REST Authentication Provider - Bearer API Key"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model,name:ssi_rest_api.model_ssi_rest_auth_basic
+msgid "REST Authentication Provider - HTTP Basic"
 msgstr ""
 
 #. module: ssi_rest_api
