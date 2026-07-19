@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="1">
+    <record id="ssi_rest_auth_scheme_bearer" model="ssi_rest_auth_scheme">
+        <field name="name">Bearer</field>
+        <field name="code">bearer</field>
+        <field name="provider_model">ssi_rest_auth_bearer</field>
+        <field name="sequence">10</field>
+    </record>
+
+    <record id="ssi_rest_auth_scheme_basic" model="ssi_rest_auth_scheme">
+        <field name="name">Basic</field>
+        <field name="code">basic</field>
+        <field name="provider_model">ssi_rest_auth_basic</field>
+        <field name="sequence">20</field>
+    </record>
+</odoo>

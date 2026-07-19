@@ -24,5 +24,6 @@
         "security/ir_model_access/ssi_rest_auth_scheme.xml",
         "menu.xml",
         "views/ssi_rest_auth_scheme_views.xml",
+        "data/ssi_rest_auth_scheme_data.xml",
     ],
 }
