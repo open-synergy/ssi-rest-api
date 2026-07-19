@@ -49,7 +49,12 @@ from . import _helpers
 MAX_UPLOAD_CONTENT_LENGTH = 25 * 1024 * 1024
 
 
-def _upload_max_content_length(controller, rule, args):
+def _upload_max_content_length(controller):
+    # Core calls this with a single positional arg — the controller
+    # instance (`rule.endpoint.func.__self__`, see `odoo/http.py`'s base
+    # `Dispatcher.pre_dispatch`) — unlike the unrelated `readonly=`
+    # callable convention (`(controller, rule, args)`) used elsewhere in
+    # this module family; do not conflate the two signatures.
     return MAX_UPLOAD_CONTENT_LENGTH
 
 

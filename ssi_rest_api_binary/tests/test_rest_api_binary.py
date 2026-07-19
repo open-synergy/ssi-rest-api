@@ -136,9 +136,7 @@ class TestSsiRestApiBinary(HttpCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["field"], "image_1920")
         self.partner.invalidate_recordset(["image_1920"])
-        self.assertEqual(
-            base64.b64decode(self.partner.image_1920), other_content
-        )
+        self.assertEqual(base64.b64decode(self.partner.image_1920), other_content)
 
     @mute_logger(_DISPATCHER_LOGGER, "odoo.http")
     def test_download_unreadable_record_is_403(self):
