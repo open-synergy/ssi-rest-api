@@ -104,7 +104,16 @@ class SsiRestReportController(http.Controller):
                 status=422,
             )
         report_model = request.env["ir.actions.report"].with_context(
-            report_pdf_no_attachment=True
+            report_pdf_no_attachment=True,
+            # Without this, `_pre_render_qweb_pdf` (core) silently falls
+            # back to HTML whenever Odoo itself is running under a test
+            # runner (`tools.config['test_enable']`) to avoid depending
+            # on a real `wkhtmltopdf` binary in every test environment —
+            # irrelevant to a real REST client, but it would make this
+            # endpoint's own CI tests observe HTML instead of the PDF
+            # bytes a production caller actually gets. Same pattern core
+            # uses in its own report tests (`base/tests/test_reports.py`).
+            force_report_rendering=True,
         )
         content, _kind = report_model._render(report.report_name, record_ids)
         return request.make_response(content, headers=[("Content-Type", content_type)])

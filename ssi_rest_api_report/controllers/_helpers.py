@@ -26,9 +26,7 @@ def resolve_report(env, report_ref):
     endpoint precedent.
     """
     if not report_ref:
-        raise RestAuthError(
-            "validation_error", "report_name is required.", status=422
-        )
+        raise RestAuthError("validation_error", "report_name is required.", status=422)
     try:
         return env["ir.actions.report"]._get_report(report_ref)
     except ValueError as exc:
