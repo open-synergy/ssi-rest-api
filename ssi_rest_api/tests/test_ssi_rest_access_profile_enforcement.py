@@ -53,7 +53,9 @@ class TestSsiRestAccessProfileRuleMatching(TransactionCase):
 
     def test_empty_path_pattern_matches_everything(self):
         rule = self._rule()
-        self.assertTrue(rule._matches_request("/api/v1/orm/res.partner", "GET", None, None))
+        self.assertTrue(
+            rule._matches_request("/api/v1/orm/res.partner", "GET", None, None)
+        )
 
     def test_path_pattern_glob_match(self):
         rule = self._rule(path_pattern="/api/v1/orm/*")
@@ -118,7 +120,11 @@ class TestSsiRestAccessProfileEvaluation(TransactionCase):
                 "code": "eval_fallback_profile",
                 "default_effect": "deny",
                 "rule_ids": [
-                    (0, 0, {"sequence": 10, "effect": "allow", "path_pattern": "/never"}),
+                    (
+                        0,
+                        0,
+                        {"sequence": 10, "effect": "allow", "path_pattern": "/never"},
+                    ),
                 ],
             }
         )
