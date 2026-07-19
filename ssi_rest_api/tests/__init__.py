@@ -14,3 +14,4 @@ from . import test_rest_routing
 from . import test_ssi_rest_access_profile
 from . import test_ssi_rest_access_profile_enforcement
 from . import test_ssi_rest_auth_scheme
+from . import test_ssi_rest_serializer
