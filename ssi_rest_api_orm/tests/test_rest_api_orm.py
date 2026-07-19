@@ -130,7 +130,7 @@ class TestSsiRestApiOrm(HttpCase):
         self.assertEqual(len(result), 1)
         self.assertNotEqual(result[0], self.partner.id)
 
-    @mute_logger(_DISPATCHER_LOGGER)
+    @mute_logger(_DISPATCHER_LOGGER, "odoo.http")
     def test_call_private_method_is_rejected_not_500(self):
         response = self.url_open(
             "/api/v1/orm/res.partner/call/_compute_display_name",
