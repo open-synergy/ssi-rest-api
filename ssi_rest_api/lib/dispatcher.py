@@ -23,7 +23,7 @@ Odoo 19 mechanism instead.
 import logging
 import uuid
 
-from werkzeug.exceptions import HTTPException
+from werkzeug.exceptions import BadRequest, HTTPException
 
 from odoo.http import Json2Dispatcher, Response
 
@@ -80,17 +80,39 @@ class SsiRestDispatcher(Json2Dispatcher):
         mimetype = self.request.httprequest.mimetype
         if mimetype in _FORM_MIMETYPES:
             self.request.params = dict(self.request.get_http_params(), **args)
-            if self.request.db:
-                result = self.request.registry["ir.http"]._dispatch(endpoint)
-            else:
-                result = endpoint(**self.request.params)
-            if isinstance(result, Response):
-                return result
-            return self.request.make_json_response(result)
-        # JSON body, or no body at all: `Json2Dispatcher.dispatch` already
-        # does the right thing (it parses the body only when
-        # `content_length` is truthy).
-        return super().dispatch(endpoint, args)
+        else:
+            # JSON body, or no body at all. Deliberately *not* delegated to
+            # `Json2Dispatcher.dispatch` (core) here: that method only does
+            # `self.request.params = self.jsonrequest | args`, which never
+            # reads `request.httprequest.args` at all (verified against
+            # Odoo 19 core) — a query string such as `?kind=missing` would
+            # therefore silently never reach the endpoint. Precedence below,
+            # most to least authoritative: path parameters (`args`,
+            # structurally guaranteed by the matched route) > JSON body
+            # (the caller's explicit payload) > query string (commonly used
+            # for filters/defaults, e.g. on GET-style calls). This ordering
+            # is the stable contract every `ssi_rest` endpoint can rely on,
+            # including future CRUD endpoints (#11 and beyond).
+            if self.request.httprequest.content_length:
+                try:
+                    self.jsonrequest = self.request.get_json_data()
+                except ValueError as exc:
+                    message = f"could not parse the body as json: {exc.args[0]}"
+                    raise BadRequest(message) from exc
+            query_params = self.request.httprequest.args.to_dict()
+            self.request.params = {
+                **query_params,
+                **(self.jsonrequest or {}),
+                **args,
+            }
+
+        if self.request.db:
+            result = self.request.registry["ir.http"]._dispatch(endpoint)
+        else:
+            result = endpoint(**self.request.params)
+        if isinstance(result, Response):
+            return result
+        return self.request.make_json_response(result)
 
     def pre_dispatch(self, rule, args):
         result = super().pre_dispatch(rule, args)
