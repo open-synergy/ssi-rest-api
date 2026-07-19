@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="ssi_rest_oauth_scope_view_search" model="ir.ui.view">
+        <field name="name">ssi_rest_oauth_scope - search</field>
+        <field name="model">ssi_rest_oauth_scope</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="code" />
+                <filter
+                    name="dom_active"
+                    string="Active"
+                    domain="[('active', '=', True)]"
+                />
+                <filter
+                    name="dom_inactive"
+                    string="Inactive"
+                    domain="[('active', '=', False)]"
+                />
+            </search>
+        </field>
+    </record>
+
+    <record id="ssi_rest_oauth_scope_view_list" model="ir.ui.view">
+        <field name="name">ssi_rest_oauth_scope - list</field>
+        <field name="model">ssi_rest_oauth_scope</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" />
+                <field name="code" />
+                <field name="profile_id" />
+                <field name="active" widget="boolean_toggle" />
+            </list>
+        </field>
+    </record>
+
+    <record id="ssi_rest_oauth_scope_view_form" model="ir.ui.view">
+        <field name="name">ssi_rest_oauth_scope - form</field>
+        <field name="model">ssi_rest_oauth_scope</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="active" widget="boolean_toggle" />
+                    </div>
+                    <group name="group_1">
+                        <field name="name" />
+                        <field name="code" />
+                        <field name="profile_id" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ssi_rest_oauth_scope_action" model="ir.actions.act_window">
+        <field name="name">OAuth2 Scope</field>
+        <field name="res_model">ssi_rest_oauth_scope</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="ssi_rest_oauth_scope_menu"
+        parent="ssi_rest_api.menu_ssi_rest_api_configuration"
+        action="ssi_rest_oauth_scope_action"
+        sequence="50"
+    />
+</odoo>

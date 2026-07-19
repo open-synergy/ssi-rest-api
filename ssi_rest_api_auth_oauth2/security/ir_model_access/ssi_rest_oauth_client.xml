@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!-- Binding, backlog issue #20's Keputusan Desain: 2-record ACL
+         pattern — every internal user may view, only base.group_system
+         may create/edit/delete. No dedicated configurator group (unlike
+         a plain master-data model): a registered OAuth2 client is a
+         security credential, administered by system administrators only. -->
+    <record id="ssi_rest_oauth_client_all_access" model="ir.model.access">
+        <field name="name">ssi_rest_oauth_client - all</field>
+        <field name="model_id" ref="model_ssi_rest_oauth_client" />
+        <field name="group_id" ref="base.group_user" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="0" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+
+    <record id="ssi_rest_oauth_client_user_access" model="ir.model.access">
+        <field name="name">ssi_rest_oauth_client - user</field>
+        <field name="model_id" ref="model_ssi_rest_oauth_client" />
+        <field name="group_id" ref="base.group_system" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+
+    <!-- ssi_rest_oauth_client.redirect_uri: detail/child model, no group
+         of its own (skill odoo-development's 04-models.md "Model
+         Detail/Child" + 06-security.md's own section for it) — access
+         piggybacks on the parent's own access group (base.group_system,
+         since ssi_rest_oauth_client itself has no dedicated group
+         either) and is declared in this same file, never a separate one.
+         This is what backlog issue #20's Keputusan Desain means by
+         "Tidak ada ACL terpisah untuk model child": no distinct group,
+         no distinct file — not literally zero ir.model.access rows,
+         which would make the redirect_uri O2M tab unreadable even to an
+         administrator. -->
+    <record id="ssi_rest_oauth_client_redirect_uri_all_access" model="ir.model.access">
+        <field name="name">ssi_rest_oauth_client.redirect_uri - all</field>
+        <field name="model_id" ref="model_ssi_rest_oauth_client_redirect_uri" />
+        <field name="group_id" ref="base.group_user" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="0" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+
+    <record id="ssi_rest_oauth_client_redirect_uri_user_access" model="ir.model.access">
+        <field name="name">ssi_rest_oauth_client.redirect_uri - user</field>
+        <field name="model_id" ref="model_ssi_rest_oauth_client_redirect_uri" />
+        <field name="group_id" ref="base.group_system" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+</odoo>

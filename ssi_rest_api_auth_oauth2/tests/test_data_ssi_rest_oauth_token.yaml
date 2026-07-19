@@ -1,0 +1,106 @@
+scenarios:
+  - name: "Create OAuth2 access token row"
+    steps:
+      - step: "Create a client to attach the token to"
+        action: "create"
+        model: "ssi_rest_oauth_client"
+        save_as: "client"
+        values:
+          name: "Token Test App 1"
+          client_id: "token-test-app-1"
+      - step: "Create token"
+        action: "create"
+        model: "ssi_rest_oauth_token"
+        save_as: "token"
+        values:
+          client_id: "REC: client.id"
+          token_type: "access"
+          scope: "read:partner"
+          expiration_date: "EVAL: datetime.now() + timedelta(hours=1)"
+      - step: "Assert token fields"
+        action: "assert"
+        target: "token"
+        asserts:
+          token_type:
+            type: "value"
+            expected: "access"
+          scope:
+            type: "value"
+            expected: "read:partner"
+          revoked:
+            type: "value"
+            expected: false
+          client_id:
+            type: "m2o"
+            expected: "REC: client"
+
+  - name: "Revoke an OAuth2 token"
+    steps:
+      - step: "Create a client to attach the token to"
+        action: "create"
+        model: "ssi_rest_oauth_client"
+        save_as: "client"
+        values:
+          name: "Token Test App 2"
+          client_id: "token-test-app-2"
+      - step: "Create token"
+        action: "create"
+        model: "ssi_rest_oauth_token"
+        save_as: "token"
+        values:
+          client_id: "REC: client.id"
+          token_type: "access"
+          expiration_date: "EVAL: datetime.now() + timedelta(hours=1)"
+      - step: "Revoke it"
+        action: "call"
+        target: "token"
+        method: "action_revoke"
+      - step: "Assert revoked"
+        action: "assert"
+        target: "token"
+        asserts:
+          revoked:
+            type: "value"
+            expected: true
+
+  - name: "Autovacuum purges only expired token rows"
+    steps:
+      - step: "Create a client to attach the tokens to"
+        action: "create"
+        model: "ssi_rest_oauth_client"
+        save_as: "client"
+        values:
+          name: "Token Test App 3"
+          client_id: "token-test-app-3"
+      - step: "Create an already-expired token"
+        action: "create"
+        model: "ssi_rest_oauth_token"
+        save_as: "expired_token"
+        values:
+          client_id: "REC: client.id"
+          token_type: "access"
+          expiration_date: "EVAL: datetime.now() - timedelta(days=1)"
+      - step: "Create a still-valid token"
+        action: "create"
+        model: "ssi_rest_oauth_token"
+        save_as: "valid_token"
+        values:
+          client_id: "REC: client.id"
+          token_type: "access"
+          expiration_date: "EVAL: datetime.now() + timedelta(hours=1)"
+      - step: "Run the autovacuum gc method"
+        action: "call"
+        target: "valid_token"
+        method: "_gc_expired_oauth_token"
+      - step: "Expired token row is gone"
+        action: "search"
+        model: "ssi_rest_oauth_token"
+        domain: [["id", "=", "REC: expired_token.id"]]
+        save_as: "expired_search"
+        expect_count: 0
+      - step: "Valid token row survives"
+        action: "search"
+        model: "ssi_rest_oauth_token"
+        domain: [["id", "=", "REC: valid_token.id"]]
+        save_as: "valid_search"
+        expect_count: 1

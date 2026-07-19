@@ -1,0 +1,67 @@
+scenarios:
+  - name: "Create OAuth2 scope"
+    steps:
+      - step: "Create scope"
+        action: "create"
+        model: "ssi_rest_oauth_scope"
+        save_as: "scope"
+        values:
+          name: "Read Partner"
+          code: "read:partner"
+      - step: "Assert created"
+        action: "assert"
+        target: "scope"
+        asserts:
+          name:
+            type: "value"
+            expected: "Read Partner"
+          code:
+            type: "value"
+            expected: "read:partner"
+          active:
+            type: "value"
+            expected: true
+
+  - name: "Edit OAuth2 scope"
+    steps:
+      - step: "Create scope"
+        action: "create"
+        model: "ssi_rest_oauth_scope"
+        save_as: "scope"
+        values:
+          name: "Write Partner"
+          code: "write:partner"
+      - step: "Rename scope"
+        action: "write"
+        target: "scope"
+        values:
+          name: "Write Partner (Updated)"
+      - step: "Assert renamed"
+        action: "assert"
+        target: "scope"
+        asserts:
+          name:
+            type: "value"
+            expected: "Write Partner (Updated)"
+
+  - name: "Archive OAuth2 scope"
+    steps:
+      - step: "Create scope"
+        action: "create"
+        model: "ssi_rest_oauth_scope"
+        save_as: "scope"
+        values:
+          name: "Delete Partner"
+          code: "delete:partner"
+      - step: "Archive scope"
+        action: "write"
+        target: "scope"
+        values:
+          active: false
+      - step: "Assert archived"
+        action: "assert"
+        target: "scope"
+        asserts:
+          active:
+            type: "value"
+            expected: false

@@ -1,0 +1,101 @@
+scenarios:
+  - name: "Create OAuth2 client with redirect URIs"
+    steps:
+      - step: "Create client with two redirect URIs"
+        action: "create"
+        model: "ssi_rest_oauth_client"
+        save_as: "client"
+        values:
+          name: "Sample App"
+          client_id: "sample-app"
+          client_type: "confidential"
+          grant_types: "authorization_code,refresh_token"
+          redirect_uri_ids:
+            - - 0
+              - 0
+              - sequence: 10
+                url: "https://app.example.com/callback"
+            - - 0
+              - 0
+              - sequence: 20
+                url: "https://app.example.com/callback2"
+      - step: "Assert client fields"
+        action: "assert"
+        target: "client"
+        asserts:
+          name:
+            type: "value"
+            expected: "Sample App"
+          client_id:
+            type: "value"
+            expected: "sample-app"
+          client_type:
+            type: "value"
+            expected: "confidential"
+          active:
+            type: "value"
+            expected: true
+          client_secret_hash:
+            type: "value"
+            operator: "is_falsy"
+      - step: "Assert two redirect URIs"
+        action: "assert"
+        target: "client"
+        asserts:
+          redirect_uri_ids:
+            type: "o2m"
+            check: "count"
+            expected_count: 2
+
+  - name: "Edit OAuth2 client"
+    steps:
+      - step: "Create client"
+        action: "create"
+        model: "ssi_rest_oauth_client"
+        save_as: "client"
+        values:
+          name: "Editable App"
+          client_id: "editable-app"
+      - step: "Rename client"
+        action: "write"
+        target: "client"
+        values:
+          name: "Editable App (Updated)"
+      - step: "Assert renamed"
+        action: "assert"
+        target: "client"
+        asserts:
+          name:
+            type: "value"
+            expected: "Editable App (Updated)"
+
+  - name: "Deleting a client cascades to its redirect URIs"
+    steps:
+      - step: "Create client with one redirect URI"
+        action: "create"
+        model: "ssi_rest_oauth_client"
+        save_as: "client"
+        values:
+          name: "Cascade App"
+          client_id: "cascade-app"
+          redirect_uri_ids:
+            - - 0
+              - 0
+              - sequence: 10
+                url: "https://cascade.example.com/callback"
+      - step: "Capture the client id before it is gone"
+        action: "assert"
+        target: "client"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+      - step: "Delete the client"
+        action: "unlink"
+        target: "client"
+      - step: "No orphan redirect_uri row survives"
+        action: "search"
+        model: "ssi_rest_oauth_client.redirect_uri"
+        domain: [["url", "=", "https://cascade.example.com/callback"]]
+        save_as: "orphans"
+        expect_count: 0

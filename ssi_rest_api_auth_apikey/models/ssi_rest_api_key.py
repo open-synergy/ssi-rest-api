@@ -80,7 +80,6 @@ class SsiRestApiKey(models.Model):
     )
     user_id = fields.Many2one(
         comodel_name="res.users",
-        string="User",
         required=True,
         ondelete="cascade",
         default=lambda self: self.env.user,
