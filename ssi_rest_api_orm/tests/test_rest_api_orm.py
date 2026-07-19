@@ -94,6 +94,7 @@ class TestSsiRestApiOrm(HttpCase):
         self.assertEqual(body[0]["id"], self.partner.id)
         self.assertEqual(self.partner.name, "Renamed Via REST")
 
+    @mute_logger(_DISPATCHER_LOGGER)
     def test_write_without_vals_is_422(self):
         response = self.url_open(
             f"/api/v1/orm/res.partner/write?ids={self.partner.id}",
@@ -104,10 +105,14 @@ class TestSsiRestApiOrm(HttpCase):
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.json()["error"]["code"], "validation_error")
 
+    @mute_logger(_DISPATCHER_LOGGER)
     def test_create_without_vals_is_422(self):
+        # `json={}` alone does not make `url_open` infer a POST (an empty
+        # dict is falsy) — `method` must be explicit here.
         response = self.url_open(
             "/api/v1/orm/res.partner/create",
             headers=self._headers(),
+            method="POST",
             json={},
         )
         self.assertEqual(response.status_code, 422)
