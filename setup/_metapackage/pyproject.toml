@@ -1,8 +1,9 @@
 [project]
 name = "odoo-addons-open-synergy-ssi-rest-api"
-version = "19.0.20260719.0"
+version = "19.0.20260719.1"
 dependencies = [
     "odoo-addon-ssi_rest_api==19.0.*",
+    "odoo-addon-ssi_rest_api_orm==19.0.*",
 ]
 classifiers=[
     "Programming Language :: Python",
