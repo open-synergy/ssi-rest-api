@@ -9,4 +9,5 @@ from . import ssi_rest_auth_basic  # noqa: F401
 from . import ssi_rest_access_profile  # noqa: F401
 from . import ssi_rest_access_profile_rule  # noqa: F401
 from . import res_users  # noqa: F401
+from . import ssi_rest_serializer  # noqa: F401
 from . import ir_http  # noqa: F401
