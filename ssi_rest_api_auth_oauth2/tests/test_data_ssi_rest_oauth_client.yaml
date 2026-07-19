@@ -99,13 +99,3 @@ scenarios:
         domain: [["url", "=", "https://cascade.example.com/callback"]]
         save_as: "orphans"
         expect_count: 0
-
-  - name: "client_id is required"
-    steps:
-      - step: "Create client without client_id"
-        action: "create"
-        model: "ssi_rest_oauth_client"
-        expect_error:
-          type: "ValidationError"
-        values:
-          name: "No Client Id"

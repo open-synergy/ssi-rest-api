@@ -29,6 +29,18 @@ class TestSsiRestOauthClient(YamlTransactionCase):
                 {"name": "App B", "client_id": "dup-client"}
             )
 
+    @mute_logger("odoo.sql_db")
+    def test_client_id_is_required(self):
+        """Python murni -- pemicu P5 (L-22: field client_id required=True
+        tanpa default punya kolom NOT NULL di database tapi tidak ada
+        validasi Python-level yang mengangkat ValidationError sebelum
+        INSERT -- yang terangkat adalah psycopg2.IntegrityError
+        (NotNullViolation), di luar 12 tipe yang dikenali expect_error
+        YAML).
+        """
+        with self.assertRaises(IntegrityError):
+            self.env["ssi_rest_oauth_client"].create({"name": "No Client Id"})
+
     def test_generate_client_secret_roundtrip(self):
         """Python murni -- pemicu P1 (L-01: _check_client_secret's boolean
         return value cannot be asserted by any YAML action -- `call`

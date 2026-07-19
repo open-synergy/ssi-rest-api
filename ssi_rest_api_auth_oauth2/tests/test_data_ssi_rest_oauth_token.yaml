@@ -1,16 +1,13 @@
-setup:
-  steps:
-    - step: "Create a client every scenario can attach tokens to"
-      action: "create"
-      model: "ssi_rest_oauth_client"
-      save_as: "client"
-      values:
-        name: "Token Test App"
-        client_id: "token-test-app"
-
 scenarios:
   - name: "Create OAuth2 access token row"
     steps:
+      - step: "Create a client to attach the token to"
+        action: "create"
+        model: "ssi_rest_oauth_client"
+        save_as: "client"
+        values:
+          name: "Token Test App 1"
+          client_id: "token-test-app-1"
       - step: "Create token"
         action: "create"
         model: "ssi_rest_oauth_token"
@@ -39,6 +36,13 @@ scenarios:
 
   - name: "Revoke an OAuth2 token"
     steps:
+      - step: "Create a client to attach the token to"
+        action: "create"
+        model: "ssi_rest_oauth_client"
+        save_as: "client"
+        values:
+          name: "Token Test App 2"
+          client_id: "token-test-app-2"
       - step: "Create token"
         action: "create"
         model: "ssi_rest_oauth_token"
@@ -61,6 +65,13 @@ scenarios:
 
   - name: "Autovacuum purges only expired token rows"
     steps:
+      - step: "Create a client to attach the tokens to"
+        action: "create"
+        model: "ssi_rest_oauth_client"
+        save_as: "client"
+        values:
+          name: "Token Test App 3"
+          client_id: "token-test-app-3"
       - step: "Create an already-expired token"
         action: "create"
         model: "ssi_rest_oauth_token"

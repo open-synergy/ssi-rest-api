@@ -24,6 +24,23 @@ outright by Odoo 19's own test harness (missing the ``test_request_key``
 cookie ``Opener.request``/``HttpCase.allow_requests()`` sets
 automatically), and working around that gate would add complexity with
 no behavioural difference from what ``self.opener`` already gives us.
+
+The test-only protected route below is declared with ``schemes=("oauth2",)``:
+the built-in ``bearer`` scheme (``ssi_rest_api``) is also active in this
+repo and reads the very same ``Authorization`` header unconditionally (it
+has no shape of its own to filter on, unlike JWT), so an unrestricted
+route would see *two* providers extract a credential for every access
+token issued below and turn every case here into a
+``400 multiple_credentials`` before the OAuth2 provider is ever
+exercised. Restricting the route is the exact idiom
+``ssi_rest_api_auth_jwt``'s own ``test_controller_ssi_rest_auth_jwt.py``
+already established for this situation (itself following
+``ssi_rest_api``'s own ``tests/test_rest_auth.py::test_auth_restricted``)
+-- not a workaround invented here. This is a test-only concern: the
+production ``/oauth2/authorize``/``/oauth2/token``/``/oauth2/revoke``
+controllers never go through ``auth="ssi_rest"`` at all (see
+``controllers/main.py``'s own module docstring), so no scheme extraction
+happens there in the first place.
 """
 
 import base64
@@ -54,7 +71,7 @@ class SsiRestAuthOauth2TestController(http.Controller):
     test_rest_error_envelope.py module docstring for the rationale of
     defining it here rather than in a controllers/main.py."""
 
-    @rest_route(["/test-auth-oauth2"], auth="ssi_rest")
+    @rest_route(["/test-auth-oauth2"], auth="ssi_rest", schemes=("oauth2",))
     def test_auth(self, **kwargs):
         auth = request.rest_auth
         return {

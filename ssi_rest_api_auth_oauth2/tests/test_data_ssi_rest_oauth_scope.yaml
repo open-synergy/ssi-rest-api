@@ -65,13 +65,3 @@ scenarios:
           active:
             type: "value"
             expected: false
-
-  - name: "Scope name is required"
-    steps:
-      - step: "Create scope without name"
-        action: "create"
-        model: "ssi_rest_oauth_scope"
-        expect_error:
-          type: "ValidationError"
-        values:
-          code: "no:name"

@@ -24,6 +24,18 @@ without this check *every* bearer-authenticated request anywhere in the
 repo -- not just this module's own -- would extract two credentials at
 once and fail as ``400 multiple_credentials``, regardless of whether the
 caller ever touches OAuth2 at all.
+
+This only protects the one direction this provider controls: it cannot
+stop ``ssi_rest_auth_bearer`` from *also* claiming one of this module's
+own ``"sot_"``-prefixed tokens, since that scheme's own extraction is
+shape-blind by design. A route that must accept only OAuth2 access
+tokens restricts itself with ``rest_route(..., schemes=("oauth2",))``
+(the same idiom ``ssi_rest_api_auth_jwt``'s own tests already use, see
+``tests/test_controller_ssi_rest_auth_oauth2.py``); a deployment that
+wants every route to accept OAuth2 tokens without that restriction
+should deactivate the ``bearer`` ``ssi_rest_auth_scheme`` record instead
+-- an operational configuration step, not a code path this provider can
+resolve unilaterally.
 """
 
 from odoo import models

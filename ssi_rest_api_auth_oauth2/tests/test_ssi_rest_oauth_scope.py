@@ -30,3 +30,14 @@ class TestSsiRestOauthScope(YamlTransactionCase):
             self.env["ssi_rest_oauth_scope"].create(
                 {"name": "Read Partner Again", "code": "read:partner"}
             )
+
+    @mute_logger("odoo.sql_db")
+    def test_name_is_required(self):
+        """Python murni -- pemicu P5 (L-22: field name required=True tanpa
+        default punya kolom NOT NULL di database tapi tidak ada validasi
+        Python-level yang mengangkat ValidationError sebelum INSERT --
+        yang terangkat adalah psycopg2.IntegrityError (NotNullViolation),
+        di luar 12 tipe yang dikenali expect_error YAML).
+        """
+        with self.assertRaises(IntegrityError):
+            self.env["ssi_rest_oauth_scope"].create({"code": "no:name"})
