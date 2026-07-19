@@ -20,9 +20,21 @@ registry-based ``Dispatcher`` seam used below is the officially supported
 Odoo 19 mechanism instead.
 """
 
+import logging
 import uuid
 
+from werkzeug.exceptions import HTTPException
+
 from odoo.http import Json2Dispatcher, Response
+
+from .errors import (
+    build_error_body,
+    classify_exception,
+    format_traceback,
+    traceback_disclosure_allowed,
+)
+
+_logger = logging.getLogger(__name__)
 
 #: Mimetypes that must be read through ``request.get_http_params()`` instead
 #: of the JSON body parser (file uploads and classic form posts).
@@ -82,6 +94,74 @@ class SsiRestDispatcher(Json2Dispatcher):
 
     def pre_dispatch(self, rule, args):
         result = super().pre_dispatch(rule, args)
-        request_id = str(uuid.uuid4())
-        self.request.future_response.headers.set(REQUEST_ID_HEADER, request_id)
+        self._ensure_request_id()
         return result
+
+    def _ensure_request_id(self):
+        """Return this request's correlation id, generating and storing one
+        on ``future_response`` if none exists yet.
+
+        Normally set once by :meth:`pre_dispatch` above. The fallback here
+        exists for :meth:`handle_error`: an exception raised *before*
+        ``pre_dispatch`` runs (e.g. during authentication) would otherwise
+        reach ``handle_error`` with no id set at all, and the error envelope
+        must always carry one.
+        """
+        headers = self.request.future_response.headers
+        request_id = headers.get(REQUEST_ID_HEADER)
+        if not request_id:
+            request_id = str(uuid.uuid4())
+            headers.set(REQUEST_ID_HEADER, request_id)
+        return request_id
+
+    def handle_error(self, exc: Exception) -> Response:
+        """Render any exception raised while serving a ``ssi_rest`` route as
+        the single error envelope shape documented in ``lib/errors.py``.
+
+        Deliberately written from scratch rather than delegating to
+        ``Json2Dispatcher.handle_error``: that implementation calls
+        ``odoo.http.serialize_exception()``, which unconditionally embeds a
+        full Python traceback under a ``debug`` key — not acceptable on a
+        public error response. Note that ``Application.__call__`` (core)
+        never routes ``handle_error``'s return value through
+        ``Dispatcher.post_dispatch``/``_inject_future_response`` on the
+        error path, so the ``X-Request-Id`` header is set on this response
+        explicitly below rather than relying on ``future_response``.
+        """
+        if isinstance(exc, HTTPException) and exc.response:
+            # A response already built via
+            # `werkzeug.exceptions.abort(Response(...))` (e.g. the CORS
+            # pre-flight short-circuit in `Dispatcher.pre_dispatch`) is a
+            # deliberate result, not an error to render through the
+            # envelope below.
+            return exc.response
+
+        request_id = self._ensure_request_id()
+        status, code, message = classify_exception(exc)
+
+        # Written to the server log unconditionally, regardless of whether
+        # `details` below ever discloses it to the client: this is the only
+        # place a traceback is guaranteed to end up correlated with the
+        # `request_id` also carried by the client-visible response.
+        _logger.error(
+            "ssi_rest request %s failed: code=%s status=%s",
+            request_id,
+            code,
+            status,
+            exc_info=exc,
+        )
+
+        details = None
+        if traceback_disclosure_allowed(self.request.env):
+            details = {"traceback": format_traceback(exc)}
+
+        body = build_error_body(
+            code=code,
+            message=message,
+            status=status,
+            request_id=request_id,
+            details=details,
+        )
+        return self.request.make_json_response(
+            body, headers=[(REQUEST_ID_HEADER, request_id)], status=status
+        )
