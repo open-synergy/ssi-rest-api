@@ -1,0 +1,287 @@
+options:
+  auto_refresh: true
+
+scenarios:
+  - name: "Create REST custom endpoint"
+    steps:
+      - step: "Create endpoint"
+        action: "create"
+        model: "ssi_rest_endpoint"
+        save_as: "endpoint"
+        values:
+          name: "Dummy Endpoint"
+          code: "dummy_create"
+          path: "dummy/create"
+          http_method: "GET"
+          handler_type: "model_method"
+          model_id: "base.model_res_partner"
+          method_name: "read"
+      - step: "Assert created"
+        action: "assert"
+        target: "endpoint"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Dummy Endpoint"
+          code:
+            type: "value"
+            expected: "dummy_create"
+          path:
+            type: "value"
+            expected: "dummy/create"
+          http_method:
+            type: "value"
+            expected: "GET"
+          handler_type:
+            type: "value"
+            expected: "model_method"
+          method_name:
+            type: "value"
+            expected: "read"
+          active:
+            type: "value"
+            expected: true
+          is_readonly:
+            type: "value"
+            expected: false
+
+  - name: "Edit REST custom endpoint"
+    steps:
+      - step: "Create endpoint"
+        action: "create"
+        model: "ssi_rest_endpoint"
+        save_as: "endpoint"
+        values:
+          name: "Dummy Endpoint"
+          code: "dummy_edit"
+          path: "dummy/edit"
+          http_method: "GET"
+          handler_type: "model_method"
+          model_id: "base.model_res_partner"
+          method_name: "read"
+      - step: "Write is_readonly and http_method"
+        action: "write"
+        target: "endpoint"
+        values:
+          is_readonly: true
+          http_method: "POST"
+      - step: "Assert updated"
+        action: "assert"
+        target: "endpoint"
+        asserts:
+          is_readonly:
+            type: "value"
+            expected: true
+          http_method:
+            type: "value"
+            expected: "POST"
+
+  - name: "Delete REST custom endpoint"
+    steps:
+      - step: "Create endpoint"
+        action: "create"
+        model: "ssi_rest_endpoint"
+        save_as: "endpoint"
+        values:
+          name: "Dummy Endpoint"
+          code: "dummy_delete"
+          path: "dummy/delete"
+          http_method: "GET"
+          handler_type: "model_method"
+          model_id: "base.model_res_partner"
+          method_name: "read"
+      - step: "Delete endpoint"
+        action: "unlink"
+        target: "endpoint"
+      - step: "Verify deleted"
+        action: "search"
+        model: "ssi_rest_endpoint"
+        domain: [["code", "=", "dummy_delete"]]
+        save_as: "result"
+        expect_count: 0
+
+  - name: "Duplicate code ditolak"
+    steps:
+      - step: "Create first endpoint"
+        action: "create"
+        model: "ssi_rest_endpoint"
+        save_as: "first"
+        values:
+          name: "Dummy Endpoint A"
+          code: "dummy_dup_code"
+          path: "dummy/dup-code-a"
+          http_method: "GET"
+          handler_type: "model_method"
+          model_id: "base.model_res_partner"
+          method_name: "read"
+      - step: "Create second endpoint with same code must fail"
+        action: "create"
+        model: "ssi_rest_endpoint"
+        expect_error:
+          type: "UserError"
+          message_contains: "Duplicate code"
+        values:
+          name: "Dummy Endpoint B"
+          code: "dummy_dup_code"
+          path: "dummy/dup-code-b"
+          http_method: "GET"
+          handler_type: "model_method"
+          model_id: "base.model_res_partner"
+          method_name: "read"
+
+  - name: "model_method tanpa method_name ditolak"
+    steps:
+      - step: "Create endpoint without method_name must fail"
+        action: "create"
+        model: "ssi_rest_endpoint"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "handler_type"
+        values:
+          name: "Dummy Endpoint"
+          code: "/"
+          path: "dummy/missing-method-name"
+          http_method: "GET"
+          handler_type: "model_method"
+          model_id: "base.model_res_partner"
+
+  - name: "model_method tanpa model_id ditolak"
+    steps:
+      - step: "Create endpoint without model_id must fail"
+        action: "create"
+        model: "ssi_rest_endpoint"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "handler_type"
+        values:
+          name: "Dummy Endpoint"
+          code: "/"
+          path: "dummy/missing-model-id"
+          http_method: "GET"
+          handler_type: "model_method"
+          method_name: "read"
+
+  - name: "server_action tanpa server_action_id ditolak"
+    steps:
+      - step: "Create endpoint without server_action_id must fail"
+        action: "create"
+        model: "ssi_rest_endpoint"
+        expect_error:
+          type: "ValidationError"
+          message_contains: "handler_type"
+        values:
+          name: "Dummy Endpoint"
+          code: "/"
+          path: "dummy/missing-server-action"
+          http_method: "GET"
+          handler_type: "server_action"
+
+  - name: "Archive endpoint via active=False"
+    steps:
+      - step: "Create endpoint"
+        action: "create"
+        model: "ssi_rest_endpoint"
+        save_as: "endpoint"
+        values:
+          name: "Dummy Endpoint"
+          code: "dummy_archive"
+          path: "dummy/archive"
+          http_method: "GET"
+          handler_type: "model_method"
+          model_id: "base.model_res_partner"
+          method_name: "read"
+      - step: "Archive it"
+        action: "write"
+        target: "endpoint"
+        values:
+          active: false
+      - step: "Assert archived"
+        action: "assert"
+        target: "endpoint"
+        asserts:
+          active:
+            type: "value"
+            expected: false
+
+  - name: "Configurator can create and write, plain user can only read"
+    steps:
+      - step: "Create configurator user"
+        action: "create"
+        model: "res.users"
+        save_as: "configurator"
+        context:
+          no_reset_password: true
+        values:
+          name: "Endpoint Configurator"
+          login: "ssi_rest_endpoint_configurator@example.com"
+          email: "ssi_rest_endpoint_configurator@example.com"
+          group_ids:
+            - - 6
+              - 0
+              - - "REF: ssi_rest_api_endpoint.ssi_rest_endpoint_group"
+      - step: "Create plain internal user"
+        action: "create"
+        model: "res.users"
+        save_as: "plain_user"
+        context:
+          no_reset_password: true
+        values:
+          name: "Plain User"
+          login: "ssi_rest_endpoint_plain_user@example.com"
+          email: "ssi_rest_endpoint_plain_user@example.com"
+          group_ids:
+            - - 6
+              - 0
+              - - "REF: base.group_user"
+      - step: "Configurator creates an endpoint"
+        action: "create"
+        model: "ssi_rest_endpoint"
+        save_as: "endpoint"
+        as_user: "configurator"
+        values:
+          name: "Dummy Endpoint"
+          code: "dummy_acl"
+          path: "dummy/acl"
+          http_method: "GET"
+          handler_type: "model_method"
+          model_id: "base.model_res_partner"
+          method_name: "read"
+      - step: "Configurator writes the endpoint"
+        action: "write"
+        target: "endpoint"
+        as_user: "configurator"
+        values:
+          is_readonly: true
+      - step: "Plain user can read the endpoint"
+        action: "assert"
+        target: "endpoint"
+        as_user: "plain_user"
+        asserts:
+          code:
+            type: "value"
+            expected: "dummy_acl"
+      - step: "Plain user cannot write the endpoint"
+        action: "write"
+        target: "endpoint"
+        as_user: "plain_user"
+        expect_error:
+          type: "AccessError"
+        values:
+          is_readonly: false
+      - step: "Plain user cannot create an endpoint"
+        action: "create"
+        model: "ssi_rest_endpoint"
+        as_user: "plain_user"
+        expect_error:
+          type: "AccessError"
+        values:
+          name: "Another Endpoint"
+          code: "another_acl"
+          path: "dummy/acl-another"
+          http_method: "GET"
+          handler_type: "model_method"
+          model_id: "base.model_res_partner"
+          method_name: "read"
