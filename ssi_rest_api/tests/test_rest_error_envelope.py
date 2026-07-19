@@ -30,14 +30,13 @@ from odoo.exceptions import AccessError, LockError, MissingError, UserError
 from odoo.tests import HttpCase, tagged
 from odoo.tools import mute_logger
 
-_DISPATCHER_LOGGER = "odoo.addons.ssi_rest_api.lib.dispatcher"
-
 from odoo.addons.ssi_rest_api.lib.dispatcher import REQUEST_ID_HEADER
 from odoo.addons.ssi_rest_api.lib.routing import rest_route
 
 _ACCESS_ERROR_MESSAGE = (
     "You are not allowed to access 'Secret Configuration' (secret.config) records."
 )
+_DISPATCHER_LOGGER = "odoo.addons.ssi_rest_api.lib.dispatcher"
 
 
 class SsiRestErrorTestController(http.Controller):
