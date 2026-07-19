@@ -8,8 +8,8 @@ Python murni -- pemicu P7 (L-19: ``odoo-yaml-test``'s base class is locked
 to ``TransactionCase``, a real HTTP request/response cycle -- including
 mocking the JWKS endpoint's network fetch and counting how many times it
 was called -- is out of reach) and P6 (L-15: no mock/patch from YAML,
-needed here to fake ``jwt.PyJWKClient.fetch_data`` so RS256 tests never
-touch the network).
+needed here to fake the network call ``jwt.PyJWKClient.fetch_data()``
+makes so RS256 tests never touch the network).
 
 Every test route below is declared with ``schemes=("jwt",)``: the built-in
 ``bearer`` scheme (``ssi_rest_api``) is also active in this repo and reads
@@ -93,6 +93,31 @@ def _jwk_for(public_key, kid):
     return jwk
 
 
+class _FakeJwksHttpResponse:
+    """Minimal stand-in for the context manager
+    ``urllib.request.urlopen()`` normally returns, so
+    ``PyJWKClient.fetch_data()`` itself runs completely unmocked --
+    including populating its own Tier-1 JWK Set cache -- and only the
+    actual network round-trip is faked. Mocking ``fetch_data`` directly
+    would skip that cache population and defeat
+    ``test_jwks_fetched_once_within_ttl_across_requests`` below (every
+    call would look like a cache miss)."""
+
+    def __init__(self, payload):
+        self._body = json.dumps(payload).encode()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        return False
+
+    def read(self):  # pylint: disable=method-required-super
+        # File-like `.read()` for `json.load()` -- not an Odoo ORM
+        # `read()` override, so there is no `super()` to call.
+        return self._body
+
+
 @tagged("post_install", "-at_install")
 class TestSsiRestAuthJwt(HttpCase):
     def setUp(self):
@@ -109,24 +134,22 @@ class TestSsiRestAuthJwt(HttpCase):
             {"name": "Http JWT Profile", "code": "http_jwt_profile"}
         )
 
-        # Fakes the one network round-trip `PyJWKClient.fetch_data` makes,
-        # keyed by JWKS URL, so RS256 tests never touch the network and so
+        # Fakes the one network round-trip `PyJWKClient.fetch_data()`
+        # makes (`urllib.request.urlopen`), keyed by JWKS URL, so RS256
+        # tests never touch the network and so
         # `test_jwks_fetched_once_within_ttl_across_requests` below can
-        # count real calls. `autospec=True` is required for `client_self`
-        # to be bound correctly -- see module docstring (P6).
+        # count real calls -- see module docstring (P6) and
+        # `_FakeJwksHttpResponse` above for why the network layer is
+        # faked instead of `fetch_data` itself.
         self._jwks_by_url = {}
         self._fetch_calls = Counter()
 
-        def _fake_fetch_data(client_self):
-            self._fetch_calls[client_self.uri] += 1
-            return self._jwks_by_url[client_self.uri]
+        def _fake_urlopen(req, timeout=None, context=None):
+            url = req.full_url
+            self._fetch_calls[url] += 1
+            return _FakeJwksHttpResponse(self._jwks_by_url[url])
 
-        patcher = patch.object(
-            jwt.PyJWKClient,
-            "fetch_data",
-            autospec=True,
-            side_effect=_fake_fetch_data,
-        )
+        patcher = patch("urllib.request.urlopen", side_effect=_fake_urlopen)
         patcher.start()
         self.addCleanup(patcher.stop)
 
