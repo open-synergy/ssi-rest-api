@@ -1,0 +1,288 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ssi_rest_api_auth_jwt
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__profile_id
+msgid "Access Profile"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,help:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__profile_id
+msgid ""
+"Access profile a request authenticated through this issuer is scoped to. "
+"Profiles only ever narrow access already granted by Odoo's own ACL/record "
+"rules, never widen it."
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__active
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_auth_jwt.ssi_rest_jwt_issuer_view_search
+msgid "Active"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__algorithm
+msgid "Algorithm"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__audience
+msgid "Audience (aud)"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,help:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__leeway
+msgid ""
+"Clock-skew tolerance, in seconds, applied to both exp and nbf validation."
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,help:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__name
+msgid ""
+"Descriptive label for this issuer configuration (e.g. which identity "
+"provider it represents)."
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_jwt.field_ssi_rest_auth_jwt__display_name
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields.selection,name:ssi_rest_api_auth_jwt.selection__ssi_rest_jwt_issuer__algorithm__es256
+msgid "ES256"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields.selection,name:ssi_rest_api_auth_jwt.selection__ssi_rest_jwt_issuer__algorithm__es384
+msgid "ES384"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields.selection,name:ssi_rest_api_auth_jwt.selection__ssi_rest_jwt_issuer__algorithm__es512
+msgid "ES512"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields.selection,name:ssi_rest_api_auth_jwt.selection__ssi_rest_jwt_issuer__user_match_field__email
+msgid "Email"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,help:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__audience
+msgid ""
+"Expected value of the token's aud claim, enforced on every verification with"
+" no bypass."
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,help:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__issuer
+msgid ""
+"Expected value of the token's iss claim. A token whose iss does not match "
+"any active issuer record's issuer value is rejected -- this is the lookup "
+"key used to select which issuer record verifies a given token."
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields.selection,name:ssi_rest_api_auth_jwt.selection__ssi_rest_jwt_issuer__algorithm__hs256
+msgid "HS256"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields.selection,name:ssi_rest_api_auth_jwt.selection__ssi_rest_jwt_issuer__algorithm__hs384
+msgid "HS384"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields.selection,name:ssi_rest_api_auth_jwt.selection__ssi_rest_jwt_issuer__algorithm__hs512
+msgid "HS512"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_jwt.field_ssi_rest_auth_jwt__id
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__id
+msgid "ID"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_auth_jwt.ssi_rest_jwt_issuer_view_search
+msgid "Inactive"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,help:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__active
+msgid ""
+"Inactive issuers are never matched against a token's iss claim, exactly as "
+"if they did not exist."
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__issuer
+msgid "Issuer (iss)"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,help:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__jwks_url
+msgid ""
+"JSON Web Key Set endpoint (RFC 7517) this issuer publishes its public "
+"signing keys at. Required, and only used, when algorithm is an asymmetric "
+"family (RS*/ES*); fetched through a TTL-bound cache (see lib/jwks_cache.py),"
+" never on every request."
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__jwks_url
+msgid "JWKS URL"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#. odoo-python
+#: code:addons/ssi_rest_api_auth_jwt/models/ssi_rest_jwt_issuer.py:0
+msgid "JWKS URL is required when Algorithm is an asymmetric family (RS*/ES*)."
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ssi_rest_auth_scheme,name:ssi_rest_api_auth_jwt.ssi_rest_auth_scheme_jwt
+msgid "JWT"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.actions.act_window,name:ssi_rest_api_auth_jwt.ssi_rest_jwt_issuer_action
+#: model:ir.ui.menu,name:ssi_rest_api_auth_jwt.ssi_rest_jwt_issuer_menu
+msgid "JWT Issuer"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__leeway
+msgid "Leeway"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields.selection,name:ssi_rest_api_auth_jwt.selection__ssi_rest_jwt_issuer__user_match_field__login
+msgid "Login"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__name
+msgid "Name"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,help:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__user_claim
+msgid ""
+"Name of the token claim whose value identifies the Odoo user, looked up "
+"through user_match_field. Never used to create a user -- an unmatched claim "
+"value is rejected (401), not provisioned."
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model,name:ssi_rest_api_auth_jwt.model_ssi_rest_auth_jwt
+msgid "REST Authentication Provider - JWT Bearer"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model,name:ssi_rest_api_auth_jwt.model_ssi_rest_jwt_issuer
+msgid "REST JWT Issuer"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields.selection,name:ssi_rest_api_auth_jwt.selection__ssi_rest_jwt_issuer__algorithm__rs256
+msgid "RS256"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields.selection,name:ssi_rest_api_auth_jwt.selection__ssi_rest_jwt_issuer__algorithm__rs384
+msgid "RS384"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields.selection,name:ssi_rest_api_auth_jwt.selection__ssi_rest_jwt_issuer__algorithm__rs512
+msgid "RS512"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__shared_secret
+msgid "Shared Secret"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#. odoo-python
+#: code:addons/ssi_rest_api_auth_jwt/models/ssi_rest_jwt_issuer.py:0
+msgid "Shared Secret is required when Algorithm is an HMAC family (HS*)."
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,help:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__shared_secret
+msgid ""
+"Symmetric signing secret, required and only used when algorithm is an HMAC "
+"family (HS*). Readable/writable only by the base.group_system group -- "
+"excluded from fields_get()/read() for any other user, and therefore never "
+"returned by any ssi_rest endpoint either."
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,help:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__algorithm
+msgid ""
+"The only signing algorithm accepted for tokens from this issuer. Passed "
+"explicitly to the JWT library's algorithm whitelist, never inferred from the"
+" token's own header, so a token claiming a different algorithm (including "
+"'none') is always rejected."
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_auth_jwt.ssi_rest_jwt_issuer_view_form
+msgid "Time Validation"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__user_claim
+msgid "User Claim"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_auth_jwt.ssi_rest_jwt_issuer_view_form
+msgid "User Mapping"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__user_match_field
+msgid "User Match Field"
+msgstr ""
+
+#. module: ssi_rest_api_auth_jwt
+#: model:ir.model.fields,help:ssi_rest_api_auth_jwt.field_ssi_rest_jwt_issuer__user_match_field
+msgid "res.users field user_claim's value is matched against."
+msgstr ""
