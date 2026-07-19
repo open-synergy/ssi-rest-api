@@ -67,7 +67,7 @@ class TestSsiRestSuccessEnvelope(HttpCase):
 
 @tagged("post_install", "-at_install")
 class TestSsiRestErrorEnvelope(HttpCase):
-    @mute_logger(_DISPATCHER_LOGGER)
+    @mute_logger(_DISPATCHER_LOGGER, "odoo.http")
     def test_missing_error_is_404_missing_record(self):
         response = self.url_open("/api/v1/test-error?kind=missing")
         self.assertEqual(response.status_code, 404)
@@ -75,7 +75,7 @@ class TestSsiRestErrorEnvelope(HttpCase):
         self.assertEqual(error["code"], "missing_record")
         self.assertEqual(error["status"], 404)
 
-    @mute_logger(_DISPATCHER_LOGGER)
+    @mute_logger(_DISPATCHER_LOGGER, "odoo.http")
     def test_user_error_is_422_validation_error(self):
         response = self.url_open("/api/v1/test-error?kind=validation")
         self.assertEqual(response.status_code, 422)
@@ -83,7 +83,7 @@ class TestSsiRestErrorEnvelope(HttpCase):
         self.assertEqual(error["code"], "validation_error")
         self.assertEqual(error["status"], 422)
 
-    @mute_logger(_DISPATCHER_LOGGER)
+    @mute_logger(_DISPATCHER_LOGGER, "odoo.http")
     def test_lock_error_is_409_lock_error(self):
         response = self.url_open("/api/v1/test-error?kind=lock")
         self.assertEqual(response.status_code, 409)
@@ -91,14 +91,14 @@ class TestSsiRestErrorEnvelope(HttpCase):
         self.assertEqual(error["code"], "lock_error")
         self.assertEqual(error["status"], 409)
 
-    @mute_logger(_DISPATCHER_LOGGER)
+    @mute_logger(_DISPATCHER_LOGGER, "odoo.http")
     def test_error_body_request_id_matches_response_header(self):
         response = self.url_open("/api/v1/test-error?kind=missing")
         error = response.json()["error"]
         self.assertTrue(error["request_id"])
         self.assertEqual(error["request_id"], response.headers.get(REQUEST_ID_HEADER))
 
-    @mute_logger(_DISPATCHER_LOGGER)
+    @mute_logger(_DISPATCHER_LOGGER, "odoo.http")
     def test_access_error_message_does_not_leak_model_or_field(self):
         response = self.url_open("/api/v1/test-error?kind=access")
         self.assertEqual(response.status_code, 403)
