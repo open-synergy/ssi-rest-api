@@ -89,9 +89,7 @@ class TestSsiRestCompanyLangResolution(HttpCase):
         self.assertEqual(response.json()["company_id"], self.company_b.id)
 
     def test_no_company_specified_defaults_to_user_company(self):
-        response = self.url_open(
-            "/api/v1/test-company-lang", headers=self._headers()
-        )
+        response = self.url_open("/api/v1/test-company-lang", headers=self._headers())
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["company_id"], self.company_a.id)
 
