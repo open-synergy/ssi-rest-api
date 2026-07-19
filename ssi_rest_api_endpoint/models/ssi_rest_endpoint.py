@@ -74,7 +74,6 @@ class SsiRestEndpoint(models.Model):
     )
     model_id = fields.Many2one(
         comodel_name="ir.model",
-        string="Model",
         help="Target model for handler_type=model_method: method_name "
         "is looked up and called on this model.",
     )
@@ -87,7 +86,6 @@ class SsiRestEndpoint(models.Model):
     )
     server_action_id = fields.Many2one(
         comodel_name="ir.actions.server",
-        string="Server Action",
         help="Server action run when handler_type=server_action.",
     )
     profile_ids = fields.Many2many(
