@@ -1,0 +1,202 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ssi_rest_api_auth_apikey
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.actions.act_window,name:ssi_rest_api_auth_apikey.ssi_rest_api_key_action
+#: model:ir.ui.menu,name:ssi_rest_api_auth_apikey.ssi_rest_api_key_menu
+#: model:ssi_rest_auth_scheme,name:ssi_rest_api_auth_apikey.ssi_rest_auth_scheme_apikey
+msgid "API Key"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#. odoo-python
+#: code:addons/ssi_rest_api_auth_apikey/models/ssi_rest_api_key.py:0
+msgid "API Key Generated"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__profile_id
+msgid "Access Profile"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,help:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__profile_id
+msgid ""
+"Access profile this key is scoped to. A request authenticated with this key "
+"only ever carries this single profile -- never the union of every profile "
+"user_id might otherwise qualify for -- and a profile can only narrow access "
+"already granted by Odoo's own ACL/record rules, never widen it."
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__active
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_auth_apikey.ssi_rest_api_key_view_search
+msgid "Active"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:res.groups,name:ssi_rest_api_auth_apikey.ssi_rest_api_key_group
+msgid "Administrator"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#. odoo-python
+#: code:addons/ssi_rest_api_auth_apikey/models/ssi_rest_api_key.py:0
+msgid ""
+"Copy this key now, it will not be shown again:\n"
+"\n"
+"%(raw_key)s"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,help:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__name
+msgid ""
+"Descriptive label for this API key (e.g. which integration it was issued "
+"to), shown in place of the key value itself."
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__display_name
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_apikey.field_ssi_rest_auth_apikey__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__expiration_date
+msgid "Expiration Date"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_auth_apikey.ssi_rest_api_key_view_form
+msgid "Generate Key"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__id
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_apikey.field_ssi_rest_auth_apikey__id
+msgid "ID"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_auth_apikey.ssi_rest_api_key_view_search
+msgid "Inactive"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,help:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__active
+msgid ""
+"Inactive keys are rejected as an invalid credential, exactly like a wrong or"
+" expired key, and are hidden from the default list view."
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_auth_apikey.ssi_rest_api_key_view_form
+msgid "Key"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__key_hash
+msgid "Key Hash"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__key_index
+msgid "Key Index"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__last_used_date
+msgid "Last Used Date"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__name
+msgid "Name"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,help:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__expiration_date
+msgid ""
+"Optional expiration timestamp. A request authenticated with a key whose "
+"expiration_date has passed is rejected as an invalid credential, exactly "
+"like a wrong key."
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,help:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__key_index
+msgid ""
+"Plaintext prefix of the generated raw key, used to look up a candidate row "
+"quickly (indexed) before verifying the full key against key_hash. Not secret"
+" on its own: knowing this prefix alone never authenticates a request."
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model,name:ssi_rest_api_auth_apikey.model_ssi_rest_api_key
+#: model:res.groups.privilege,name:ssi_rest_api_auth_apikey.res_groups_privilege_ssi_rest_api_key
+msgid "REST API Key"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model,name:ssi_rest_api_auth_apikey.model_ssi_rest_auth_apikey
+msgid "REST Authentication Provider - Scoped API Key"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,help:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__key_hash
+msgid ""
+"Salted hash of the full raw key (passlib pbkdf2_sha512). The raw key itself "
+"is never stored anywhere; it only ever exists as the return value of "
+"_generate_new_key(), shown to the caller once."
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,help:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__last_used_date
+msgid ""
+"Timestamp of this key's last successful authentication. Updated through a "
+"cursor independent of the authenticating request's own transaction (see "
+"_touch_last_used_date), never through that request's own env.cr."
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,field_description:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__user_id
+msgid "User"
+msgstr ""
+
+#. module: ssi_rest_api_auth_apikey
+#: model:ir.model.fields,help:ssi_rest_api_auth_apikey.field_ssi_rest_api_key__user_id
+msgid ""
+"User this key authenticates as when used on a ssi_rest request. A single "
+"user may hold several keys, each with its own profile_id."
+msgstr ""
