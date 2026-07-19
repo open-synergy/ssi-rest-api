@@ -33,6 +33,12 @@ from odoo.addons.ssi_rest_api.lib.auth import RestAuthError, RestAuthResult
 from odoo.addons.ssi_rest_api.lib.routing import rest_route
 
 _IR_HTTP_LOGGER = "odoo.addons.ssi_rest_api.models.ir_http"
+# `SsiRestDispatcher.handle_error` (`lib/dispatcher.py`) logs every error
+# response at ERROR level regardless of which HTTP status it is — including
+# the 401/400 responses these tests deliberately trigger — so it must be
+# muted on every test that expects a non-2xx response, same as
+# `test_rest_error_envelope.py`'s `_DISPATCHER_LOGGER`.
+_DISPATCHER_LOGGER = "odoo.addons.ssi_rest_api.lib.dispatcher"
 
 
 class SsiRestAuthTestController(http.Controller):
@@ -92,7 +98,7 @@ class TestSsiRestAuthMethod(HttpCase):
         self.assertEqual(body["uid"], self.env.ref("base.user_admin").id)
         self.assertEqual(body["scheme"], "dummy1")
 
-    @mute_logger(_IR_HTTP_LOGGER)
+    @mute_logger(_IR_HTTP_LOGGER, _DISPATCHER_LOGGER)
     def test_no_credential_is_401_with_combined_challenge(self):
         with (
             patch.object(
@@ -112,7 +118,7 @@ class TestSsiRestAuthMethod(HttpCase):
         self.assertIn("Dummy1Challenge", www_authenticate)
         self.assertIn("Dummy2Challenge", www_authenticate)
 
-    @mute_logger(_IR_HTTP_LOGGER)
+    @mute_logger(_IR_HTTP_LOGGER, _DISPATCHER_LOGGER)
     def test_two_credentials_at_once_is_400_multiple_credentials(self):
         with (
             patch.object(
@@ -128,7 +134,7 @@ class TestSsiRestAuthMethod(HttpCase):
         self.assertEqual(error["code"], "multiple_credentials")
         verify_mock.assert_not_called()
 
-    @mute_logger(_IR_HTTP_LOGGER)
+    @mute_logger(_IR_HTTP_LOGGER, _DISPATCHER_LOGGER)
     def test_verify_failure_is_401_without_fallthrough(self):
         # Regression (binding): even though `dummy2` is a second active
         # scheme, it never extracts a credential for this request (its
@@ -153,7 +159,7 @@ class TestSsiRestAuthMethod(HttpCase):
         self.assertEqual(error["code"], "invalid_credential")
         verify_mock.assert_called_once_with("bad-cred")
 
-    @mute_logger(_IR_HTTP_LOGGER)
+    @mute_logger(_IR_HTTP_LOGGER, _DISPATCHER_LOGGER)
     def test_unexpected_provider_exception_is_500_not_401(self):
         with (
             patch.object(
@@ -172,7 +178,7 @@ class TestSsiRestAuthMethod(HttpCase):
         error = response.json()["error"]
         self.assertEqual(error["code"], "internal_error")
 
-    @mute_logger(_IR_HTTP_LOGGER)
+    @mute_logger(_IR_HTTP_LOGGER, _DISPATCHER_LOGGER)
     def test_rest_schemes_restriction_ignores_disallowed_scheme_credential(self):
         # `dummy1` has a real credential in this request, but the endpoint
         # restricts to `schemes=("dummy2",)`: `dummy1` must never even be
