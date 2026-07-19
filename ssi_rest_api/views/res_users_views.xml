@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="view_users_form_ssi_rest_api" model="ir.ui.view">
+        <field name="name">res.users - form - ssi_rest_api</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//page[@name='access_rights']" position="inside">
+                    <group name="ssi_rest_api_group" string="REST API" groups="base.group_system">
+                        <field name="ssi_rest_enabled" />
+                        <field
+                            name="ssi_rest_profile_ids"
+                            widget="many2many_tags"
+                        />
+                    </group>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,185 @@
+options:
+  auto_refresh: true
+
+scenarios:
+  - name: "Create profile with only name and code"
+    steps:
+      - step: "Create profile"
+        action: "create"
+        model: "ssi_rest_access_profile"
+        save_as: "profile"
+        values:
+          name: "Test Profile"
+          code: "test_profile"
+      - step: "Assert defaults"
+        action: "assert"
+        target: "profile"
+        asserts:
+          default_effect:
+            type: "value"
+            expected: "deny"
+          active:
+            type: "value"
+            expected: true
+
+  - name: "Unlink profile cascades rules"
+    steps:
+      - step: "Create profile with one inline rule"
+        action: "create"
+        model: "ssi_rest_access_profile"
+        save_as: "profile"
+        values:
+          name: "Cascade Profile"
+          code: "cascade_profile"
+          rule_ids:
+            - - 0
+              - 0
+              - sequence: 10
+                effect: "allow"
+                operation: "any"
+      - step: "Rule exists before unlink"
+        action: "search"
+        model: "ssi_rest_access_profile.rule"
+        domain: [["profile_id", "=", "REC: profile.id"]]
+        save_as: "rules_before"
+        expect_count: 1
+      - step: "Unlink profile"
+        action: "unlink"
+        target: "profile"
+      - step: "Rule cascaded away"
+        action: "search"
+        model: "ssi_rest_access_profile.rule"
+        domain: [["profile_id", "=", "REC: profile.id"]]
+        save_as: "rules_after"
+        expect_count: 0
+
+  - name: "Write REST access profile on user"
+    steps:
+      - step: "Create profile"
+        action: "create"
+        model: "ssi_rest_access_profile"
+        save_as: "profile"
+        values:
+          name: "User Profile"
+          code: "user_profile"
+      - step: "Create user"
+        action: "create"
+        model: "res.users"
+        save_as: "test_user"
+        context:
+          no_reset_password: true
+        values:
+          name: "Profile Holder"
+          login: "ssi_rest_access_profile_holder@example.com"
+          email: "ssi_rest_access_profile_holder@example.com"
+          group_ids:
+            - - 6
+              - 0
+              - - "REF: base.group_user"
+      - step: "Write profile onto user"
+        action: "write"
+        target: "test_user"
+        values:
+          ssi_rest_profile_ids:
+            - - 6
+              - 0
+              - - "REC: profile.id"
+      - step: "Assert profile stored"
+        action: "assert"
+        target: "test_user"
+        asserts:
+          ssi_rest_profile_ids:
+            type: "m2m"
+            check: "exact"
+            expected_records:
+              - "REC: profile"
+
+  - name: "Create profile without name is rejected"
+    steps:
+      - step: "Create without name"
+        action: "create"
+        model: "ssi_rest_access_profile"
+        expect_error:
+          type: "ValidationError"
+        values:
+          code: "no_name_profile"
+
+  - name: "Create rule without profile_id is rejected"
+    steps:
+      - step: "Create rule without profile_id"
+        action: "create"
+        model: "ssi_rest_access_profile.rule"
+        expect_error:
+          type: "ValidationError"
+        values:
+          sequence: 10
+          effect: "allow"
+
+  - name: "Create rule without sequence is rejected"
+    steps:
+      - step: "Create profile"
+        action: "create"
+        model: "ssi_rest_access_profile"
+        save_as: "profile"
+        values:
+          name: "Rule Profile Seq"
+          code: "rule_profile_seq"
+      - step: "Create rule without sequence"
+        action: "create"
+        model: "ssi_rest_access_profile.rule"
+        expect_error:
+          type: "ValidationError"
+        values:
+          profile_id: "REC: profile.id"
+          effect: "allow"
+
+  - name: "Create rule with invalid effect is rejected"
+    steps:
+      - step: "Create profile"
+        action: "create"
+        model: "ssi_rest_access_profile"
+        save_as: "profile"
+        values:
+          name: "Rule Profile Effect"
+          code: "rule_profile_effect"
+      - step: "Create rule with bad effect"
+        action: "create"
+        model: "ssi_rest_access_profile.rule"
+        expect_error:
+          type: "ValueError"
+        values:
+          profile_id: "REC: profile.id"
+          sequence: 10
+          effect: "not_a_choice"
+
+  - name: "Plain user cannot write access profile"
+    steps:
+      - step: "Create profile"
+        action: "create"
+        model: "ssi_rest_access_profile"
+        save_as: "profile"
+        values:
+          name: "Guarded Profile"
+          code: "guarded_profile"
+      - step: "Create plain user"
+        action: "create"
+        model: "res.users"
+        save_as: "plain_user"
+        context:
+          no_reset_password: true
+        values:
+          name: "Plain User AP"
+          login: "ssi_rest_access_profile_plain@example.com"
+          email: "ssi_rest_access_profile_plain@example.com"
+          group_ids:
+            - - 6
+              - 0
+              - - "REF: base.group_user"
+      - step: "Plain user write is rejected"
+        action: "write"
+        target: "profile"
+        as_user: "plain_user"
+        expect_error:
+          type: "AccessError"
+        values:
+          name: "Hacked"

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!-- ssi_rest_access_profile: no dedicated group (issue #6 Keputusan
+         Desain) — full access limited to base.group_system directly. -->
+    <record id="ssi_rest_access_profile_all_access" model="ir.model.access">
+        <field name="name">ssi_rest_access_profile - all</field>
+        <field name="model_id" ref="model_ssi_rest_access_profile" />
+        <field name="group_id" ref="base.group_user" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="0" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+
+    <record id="ssi_rest_access_profile_user_access" model="ir.model.access">
+        <field name="name">ssi_rest_access_profile - user</field>
+        <field name="model_id" ref="model_ssi_rest_access_profile" />
+        <field name="group_id" ref="base.group_system" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+
+    <!-- Child model: no group of its own, ACL follows the parent's
+         base.group_system (06-security.md "Model Detail/Child"). -->
+    <record id="ssi_rest_access_profile_rule_all_access" model="ir.model.access">
+        <field name="name">ssi_rest_access_profile.rule - all</field>
+        <field
+            name="model_id"
+            ref="model_ssi_rest_access_profile_rule"
+        />
+        <field name="group_id" ref="base.group_user" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="0" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+
+    <record id="ssi_rest_access_profile_rule_user_access" model="ir.model.access">
+        <field name="name">ssi_rest_access_profile.rule - user</field>
+        <field
+            name="model_id"
+            ref="model_ssi_rest_access_profile_rule"
+        />
+        <field name="group_id" ref="base.group_system" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+</odoo>

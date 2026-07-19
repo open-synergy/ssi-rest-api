@@ -25,5 +25,8 @@
         "menu.xml",
         "views/ssi_rest_auth_scheme_views.xml",
         "data/ssi_rest_auth_scheme_data.xml",
+        "security/ir_model_access/ssi_rest_access_profile.xml",
+        "views/ssi_rest_access_profile_views.xml",
+        "views/res_users_views.xml",
     ],
 }

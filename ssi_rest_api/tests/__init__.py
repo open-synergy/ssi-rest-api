@@ -11,4 +11,5 @@ from . import test_rest_dispatcher
 from . import test_rest_error_envelope
 from . import test_rest_errors
 from . import test_rest_routing
+from . import test_ssi_rest_access_profile
 from . import test_ssi_rest_auth_scheme

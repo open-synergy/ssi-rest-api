@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="ssi_rest_access_profile_view_search" model="ir.ui.view">
+        <field name="name">ssi_rest_access_profile - search</field>
+        <field name="model">ssi_rest_access_profile</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="code" />
+                <filter
+                    name="dom_active"
+                    string="Active"
+                    domain="[('active', '=', True)]"
+                />
+                <filter
+                    name="dom_inactive"
+                    string="Inactive"
+                    domain="[('active', '=', False)]"
+                />
+            </search>
+        </field>
+    </record>
+
+    <record id="ssi_rest_access_profile_view_list" model="ir.ui.view">
+        <field name="name">ssi_rest_access_profile - list</field>
+        <field name="model">ssi_rest_access_profile</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" />
+                <field name="code" />
+                <field name="default_effect" />
+                <field name="active" widget="boolean_toggle" />
+            </list>
+        </field>
+    </record>
+
+    <record id="ssi_rest_access_profile_view_form" model="ir.ui.view">
+        <field name="name">ssi_rest_access_profile - form</field>
+        <field name="model">ssi_rest_access_profile</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="active" widget="boolean_toggle" />
+                    </div>
+                    <group name="group_1">
+                        <field name="name" />
+                        <field name="code" />
+                        <field name="default_effect" />
+                    </group>
+                    <notebook>
+                        <page name="rules" string="Rules">
+                            <field name="rule_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle" />
+                                    <field name="effect" />
+                                    <field name="path_pattern" />
+                                    <field name="invert" widget="boolean_toggle" />
+                                    <field name="http_methods" />
+                                    <field name="model_pattern" />
+                                    <field name="operation" />
+                                </list>
+                            </field>
+                        </page>
+                        <page name="access" string="Access">
+                            <group name="access_group_1" string="Users">
+                                <field name="user_ids" widget="many2many_tags" />
+                            </group>
+                            <group name="access_group_2" string="Groups">
+                                <field name="group_ids" widget="many2many_tags" />
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ssi_rest_access_profile_action" model="ir.actions.act_window">
+        <field name="name">Access Profile</field>
+        <field name="res_model">ssi_rest_access_profile</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="ssi_rest_access_profile_menu"
+        parent="menu_ssi_rest_api_configuration"
+        action="ssi_rest_access_profile_action"
+        groups="base.group_system"
+    />
+</odoo>
