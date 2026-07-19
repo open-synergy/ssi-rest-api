@@ -12,6 +12,8 @@ DSL cannot do at all. Every test method gets its own fresh
 docstring) — no case here relies on, or leaks into, another's session.
 """
 
+import json
+
 from odoo.tests import HttpCase, tagged
 from odoo.tools import mute_logger
 
@@ -68,6 +70,64 @@ class TestSsiRestApiOrm(HttpCase):
         body = response.json()
         self.assertLessEqual(len(body["records"]), 2)
         self.assertGreaterEqual(body["length"], 6)
+
+    def test_search_returns_ids_and_length(self):
+        response = self.url_open(
+            "/api/v1/orm/res.partner/search",
+            headers=self._headers(),
+            params={"domain": json.dumps([["id", "=", self.partner.id]])},
+        )
+        self.assertEqual(response.status_code, 200)
+        body = response.json()
+        self.assertEqual(body["ids"], [self.partner.id])
+        self.assertEqual(body["length"], 1)
+
+    def test_write_updates_record_and_response_carries_id(self):
+        response = self.url_open(
+            f"/api/v1/orm/res.partner/write?ids={self.partner.id}",
+            headers=self._headers(),
+            method="PUT",
+            json={"vals": {"name": "Renamed Via REST"}},
+        )
+        self.assertEqual(response.status_code, 200)
+        body = response.json()
+        self.assertEqual(body[0]["id"], self.partner.id)
+        self.assertEqual(self.partner.name, "Renamed Via REST")
+
+    def test_write_without_vals_is_422(self):
+        response = self.url_open(
+            f"/api/v1/orm/res.partner/write?ids={self.partner.id}",
+            headers=self._headers(),
+            method="PUT",
+            json={},
+        )
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.json()["error"]["code"], "validation_error")
+
+    def test_create_without_vals_is_422(self):
+        response = self.url_open(
+            "/api/v1/orm/res.partner/create",
+            headers=self._headers(),
+            json={},
+        )
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.json()["error"]["code"], "validation_error")
+
+    def test_read_group_groups_by_field_with_count(self):
+        response = self.url_open(
+            "/api/v1/orm/res.partner/read_group",
+            headers=self._headers(),
+            params={
+                "domain": json.dumps([["id", "=", self.partner.id]]),
+                "groupby": json.dumps(["type"]),
+                "aggregates": json.dumps(["__count"]),
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        groups = response.json()["groups"]
+        self.assertEqual(len(groups), 1)
+        self.assertEqual(groups[0]["type"], self.partner.type)
+        self.assertEqual(groups[0]["__count"], 1)
 
     def test_create_then_read_round_trip(self):
         response = self.url_open(
