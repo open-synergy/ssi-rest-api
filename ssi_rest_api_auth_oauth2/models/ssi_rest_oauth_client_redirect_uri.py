@@ -20,7 +20,6 @@ class SsiRestOauthClientRedirectUri(models.Model):
 
     client_id = fields.Many2one(
         comodel_name="ssi_rest_oauth_client",
-        string="Client",
         required=True,
         ondelete="cascade",
         help="Client this redirect URI belongs to. Deleting the client "

@@ -41,10 +41,7 @@
          administrator. -->
     <record id="ssi_rest_oauth_client_redirect_uri_all_access" model="ir.model.access">
         <field name="name">ssi_rest_oauth_client.redirect_uri - all</field>
-        <field
-            name="model_id"
-            ref="model_ssi_rest_oauth_client_redirect_uri"
-        />
+        <field name="model_id" ref="model_ssi_rest_oauth_client_redirect_uri" />
         <field name="group_id" ref="base.group_user" />
         <field name="perm_read" eval="1" />
         <field name="perm_write" eval="0" />
@@ -54,10 +51,7 @@
 
     <record id="ssi_rest_oauth_client_redirect_uri_user_access" model="ir.model.access">
         <field name="name">ssi_rest_oauth_client.redirect_uri - user</field>
-        <field
-            name="model_id"
-            ref="model_ssi_rest_oauth_client_redirect_uri"
-        />
+        <field name="model_id" ref="model_ssi_rest_oauth_client_redirect_uri" />
         <field name="group_id" ref="base.group_system" />
         <field name="perm_read" eval="1" />
         <field name="perm_write" eval="1" />

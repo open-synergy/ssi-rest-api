@@ -59,14 +59,12 @@ class SsiRestOauthToken(models.Model):
 
     client_id = fields.Many2one(
         comodel_name="ssi_rest_oauth_client",
-        string="Client",
         required=True,
         ondelete="cascade",
         help="Client this code/token was issued to.",
     )
     user_id = fields.Many2one(
         comodel_name="res.users",
-        string="User",
         ondelete="cascade",
         help="Resource owner this code/token was issued for (the user "
         "who authorized the client on the authorize endpoint). Empty for "
