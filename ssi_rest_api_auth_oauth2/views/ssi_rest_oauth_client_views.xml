@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="ssi_rest_oauth_client_view_search" model="ir.ui.view">
+        <field name="name">ssi_rest_oauth_client - search</field>
+        <field name="model">ssi_rest_oauth_client</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="client_id" />
+                <filter
+                    name="dom_active"
+                    string="Active"
+                    domain="[('active', '=', True)]"
+                />
+                <filter
+                    name="dom_inactive"
+                    string="Inactive"
+                    domain="[('active', '=', False)]"
+                />
+                <group name="group_by" string="Group By">
+                    <filter
+                        name="group_by_client_type"
+                        string="Client Type"
+                        context="{'group_by': 'client_type'}"
+                    />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="ssi_rest_oauth_client_view_list" model="ir.ui.view">
+        <field name="name">ssi_rest_oauth_client - list</field>
+        <field name="model">ssi_rest_oauth_client</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" />
+                <field name="client_id" />
+                <field name="client_type" />
+                <field name="profile_id" />
+                <field name="active" widget="boolean_toggle" />
+            </list>
+        </field>
+    </record>
+
+    <record id="ssi_rest_oauth_client_view_form" model="ir.ui.view">
+        <field name="name">ssi_rest_oauth_client - form</field>
+        <field name="model">ssi_rest_oauth_client</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button
+                        name="action_generate_client_secret"
+                        type="object"
+                        string="Generate Client Secret"
+                        class="oe_highlight"
+                        invisible="client_type != 'confidential'"
+                    />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="active" widget="boolean_toggle" />
+                    </div>
+                    <group name="group_1">
+                        <group name="group_1_left">
+                            <field name="name" />
+                            <field name="client_id" />
+                            <field name="client_type" />
+                            <field name="profile_id" />
+                        </group>
+                        <group name="group_1_right">
+                            <field name="grant_types" />
+                            <field name="scope_ids" widget="many2many_tags" />
+                            <field name="access_token_lifetime" />
+                            <field name="refresh_token_lifetime" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="page_redirect_uri" string="Redirect URIs">
+                            <field name="redirect_uri_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle" />
+                                    <field name="url" />
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ssi_rest_oauth_client_action" model="ir.actions.act_window">
+        <field name="name">OAuth2 Client</field>
+        <field name="res_model">ssi_rest_oauth_client</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="ssi_rest_oauth_client_menu"
+        parent="ssi_rest_api.menu_ssi_rest_api_configuration"
+        action="ssi_rest_oauth_client_action"
+        sequence="51"
+    />
+</odoo>

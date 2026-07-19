@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo noupdate="1">
+    <!-- Registered by record XML, same mechanism ssi_rest_api's own
+         basic/bearer schemes and ssi_rest_api_auth_apikey/
+         ssi_rest_api_auth_jwt's own schemes use, never Python
+         import-time registration. sequence=50 runs after bearer (10),
+         basic (20), apikey (30) and jwt (40, if installed); relative
+         order among active schemes only matters when more than one
+         extracts a credential from the same request, which
+         _auth_method_ssi_rest rejects as 400 multiple_credentials
+         regardless of order (see models/ssi_rest_auth_oauth2.py's module
+         docstring for the Authorization-header overlap this scheme has
+         with the built-in bearer scheme). -->
+    <record id="ssi_rest_auth_scheme_oauth2" model="ssi_rest_auth_scheme">
+        <field name="name">OAuth2</field>
+        <field name="code">oauth2</field>
+        <field name="provider_model">ssi_rest_auth_oauth2</field>
+        <field name="sequence">50</field>
+    </record>
+</odoo>

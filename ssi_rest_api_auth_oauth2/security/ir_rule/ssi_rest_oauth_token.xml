@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!-- Binding, backlog issue #20's Keputusan Desain: "pengguna hanya
+         melihat token miliknya sendiri lewat record rule berbasis
+         user_id" — deliberately global (no groups restriction), so it
+         applies uniformly to every user this model's ACL exposes at all,
+         administrators included: no carve-out is described for
+         base.group_system to see every user's tokens through the ORM.
+         Runtime authorize/token/revoke controllers always operate
+         through sudo() (see models/ssi_rest_oauth_token.py), so this
+         rule never gets in the way of the OAuth2 protocol flow itself —
+         it only narrows what a signed-in user sees browsing this model
+         directly (e.g. "which apps currently hold a token for me"). A
+         client_credentials token (user_id empty) matches neither side of
+         this domain and is therefore invisible here, consistent with it
+         having no resource owner to begin with. -->
+    <record id="ssi_rest_oauth_token_own_rule" model="ir.rule">
+        <field name="name">REST OAuth2 Token - Own</field>
+        <field name="model_id" ref="model_ssi_rest_oauth_token" />
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+</odoo>

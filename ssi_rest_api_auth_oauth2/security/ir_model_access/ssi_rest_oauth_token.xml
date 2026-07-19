@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!-- Every internal user may view (narrowed to their own rows by
+         security/ir_rule/ssi_rest_oauth_token.xml — so a plain user can
+         see which tokens were issued for them); create/edit/delete is
+         reserved to base.group_system (see that same ir.rule for why
+         this stays consistent, including for administrators). Runtime
+         issuance/consumption (authorize/token/revoke controllers) always
+         goes through sudo(), bypassing both this ACL and the rule. -->
+    <record id="ssi_rest_oauth_token_all_access" model="ir.model.access">
+        <field name="name">ssi_rest_oauth_token - all</field>
+        <field name="model_id" ref="model_ssi_rest_oauth_token" />
+        <field name="group_id" ref="base.group_user" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="0" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+
+    <record id="ssi_rest_oauth_token_user_access" model="ir.model.access">
+        <field name="name">ssi_rest_oauth_token - user</field>
+        <field name="model_id" ref="model_ssi_rest_oauth_token" />
+        <field name="group_id" ref="base.group_system" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+</odoo>
