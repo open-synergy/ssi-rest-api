@@ -23,6 +23,8 @@ rationale).
 
 import traceback
 
+from werkzeug.exceptions import RequestEntityTooLarge
+
 from odoo.exceptions import (
     AccessDenied,
     AccessError,
@@ -50,6 +52,7 @@ _GENERIC_MESSAGES = {
     # message could be anything (a raw SQL error, a Python internals
     # message, ...) and is never safe to forward as-is.
     "internal_error": "An unexpected error occurred while processing the request.",
+    "payload_too_large": "The uploaded content exceeds the maximum allowed size.",
 }
 
 #: Ordered ``(exception_class, code)`` mapping consulted top to bottom by
@@ -81,6 +84,14 @@ def classify_exception(exc):
     """
     if isinstance(exc, RestAuthError):
         return exc.code, exc.error_code, exc.description
+    if isinstance(exc, RequestEntityTooLarge):
+        # Raised by werkzeug itself while parsing the request body
+        # (`Dispatcher.pre_dispatch`'s `max_content_length` enforcement,
+        # see `lib/routing.py`'s `rest_route(..., max_content_length=...)`)
+        # *before* any endpoint body runs, so no endpoint can catch and
+        # re-raise it as a `RestAuthError` itself — it must be classified
+        # here, or it would fall through to the generic 500 below.
+        return 413, "payload_too_large", _GENERIC_MESSAGES["payload_too_large"]
     for exc_class, code in _EXCEPTION_CODE_MAP:
         if isinstance(exc, exc_class):
             if code in _GENERIC_MESSAGES:
