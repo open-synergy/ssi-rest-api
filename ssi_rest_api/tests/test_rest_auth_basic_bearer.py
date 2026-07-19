@@ -138,9 +138,17 @@ class TestSsiRestAuthBasicBearer(HttpCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(_READONLY_ENDPOINT_CALLS), 1)
 
-    def test_basic_extract_returns_none_without_authorization_header(self):
-        provider = self.env["ssi_rest_auth_basic"]
-        self.assertIsNone(provider._rest_auth_extract())
+    @mute_logger(_DISPATCHER_LOGGER)
+    def test_no_authorization_header_is_401_not_500(self):
+        # `_rest_auth_extract()` on both providers must return `None`
+        # (never raise/query the DB) when the request carries no
+        # `Authorization` header at all — asserted indirectly through a
+        # real request, since `_rest_auth_extract` reads the
+        # process-global `odoo.http.request` proxy and is only bound
+        # during an actual served request (not from a bare method call).
+        response = self.url_open("/api/v1/test-auth-basic-bearer")
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.json()["error"]["code"], "authentication_required")
 
     @mute_logger(_DISPATCHER_LOGGER)
     def test_basic_wrong_password_is_401_without_bearer_fallthrough(self):
