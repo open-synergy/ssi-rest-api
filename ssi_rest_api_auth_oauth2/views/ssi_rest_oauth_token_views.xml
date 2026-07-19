@@ -21,7 +21,7 @@
                     string="Revoked"
                     domain="[('revoked', '=', True)]"
                 />
-                <group name="group_by" string="Group By">
+                <group name="group_by">
                     <filter
                         name="group_by_client"
                         string="Client"

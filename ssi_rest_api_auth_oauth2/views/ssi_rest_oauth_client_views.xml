@@ -20,7 +20,7 @@
                     string="Inactive"
                     domain="[('active', '=', False)]"
                 />
-                <group name="group_by" string="Group By">
+                <group name="group_by">
                     <filter
                         name="group_by_client_type"
                         string="Client Type"
