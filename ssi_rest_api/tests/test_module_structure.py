@@ -41,6 +41,17 @@ FORBIDDEN_STRINGS = ("muk_rest",)
 # from the scan.
 SELF_FILE = os.path.abspath(__file__)
 
+# Backlog issue #7's binding subtractive-only invariant: access-profile
+# evaluation may only narrow access already granted by Odoo's own ACL and
+# record rules, never grant access beyond them. `sudo()` anywhere on this
+# path would silently widen it instead. Extend this list only if a future
+# backlog item adds another file on the same enforcement path.
+NO_SUDO_PATHS = (
+    "models/ssi_rest_access_profile.py",
+    "models/ssi_rest_access_profile_rule.py",
+    "lib/dispatcher.py",
+)
+
 
 def _iter_python_files(*subdirs):
     for subdir in subdirs:
@@ -173,4 +184,21 @@ class TestModuleStructure(TransactionCase):
         self.assertFalse(
             offenders,
             f"Forbidden muk_rest reference(s) found: {offenders}",
+        )
+
+    def test_no_sudo_on_access_profile_enforcement_path(self):
+        """Backlog issue #7's binding subtractive-only invariant: profile
+        evaluation may only narrow access, never grant it — `sudo()`
+        anywhere on this path would let a request bypass the caller's real
+        ACL/record rules."""
+        offenders = []
+        for relative_path in NO_SUDO_PATHS:
+            path = os.path.join(MODULE_ROOT, relative_path)
+            with open(path, encoding="utf-8") as fobj:
+                content = fobj.read()
+            if ".sudo(" in content:
+                offenders.append(path)
+        self.assertFalse(
+            offenders,
+            f"sudo() found on the no-sudo access-profile enforcement path: {offenders}",
         )

@@ -27,6 +27,7 @@ from werkzeug.exceptions import BadRequest, HTTPException
 
 from odoo.http import Json2Dispatcher, Response
 
+from .auth import RestAuthError
 from .errors import (
     build_error_body,
     classify_exception,
@@ -65,6 +66,11 @@ class SsiRestDispatcher(Json2Dispatcher):
     """
 
     routing_type = "ssi_rest"
+
+    #: Generic client-facing message for an access-profile denial. Never
+    #: mentions which profile, rule, or model matched — see
+    #: `_enforce_access_profile` below.
+    _ACCESS_DENIED_MESSAGE = "You are not allowed to perform this action."
 
     @classmethod
     def is_compatible_with(cls, request):
@@ -117,7 +123,42 @@ class SsiRestDispatcher(Json2Dispatcher):
     def pre_dispatch(self, rule, args):
         result = super().pre_dispatch(rule, args)
         self._ensure_request_id()
+        # Runs after `_authenticate` (see the module lifecycle comment on
+        # `odoo/http.py`), so `self.request.env.user` already reflects the
+        # authenticated identity, including the anonymous/public user for
+        # `auth="public"` routes.
+        self._enforce_access_profile(rule)
         return result
+
+    def _enforce_access_profile(self, rule):
+        """Reject the request with ``403 access_denied`` if the
+        authenticated user's applicable ``ssi_rest_access_profile``
+        records deny it.
+
+        BINDING SUBTRACTIVE-ONLY INVARIANT (do not remove this comment
+        when editing this method): profile evaluation may only narrow
+        access already granted by Odoo's own ACL/record rules, never
+        grant access beyond them — this method (and everything it calls)
+        must never use ``sudo()``. See
+        ``models/ssi_rest_access_profile.py`` for the full rationale.
+        """
+        env = self.request.env
+        routing = rule.endpoint.routing
+        allowed = env["ssi_rest_access_profile"]._check_request_access(
+            env.user,
+            self.request.httprequest.path,
+            self.request.httprequest.method,
+            routing.get("rest_model"),
+            routing.get("rest_operation"),
+        )
+        if allowed:
+            return
+        # Deliberately generic: the matched profile/rule/model is never
+        # disclosed to the client, only to the server log (see
+        # `handle_error`, which logs every `RestAuthError` at ERROR level
+        # correlated with this request's `X-Request-Id`, already ensured
+        # to exist by `pre_dispatch` above before this method runs).
+        raise RestAuthError("access_denied", self._ACCESS_DENIED_MESSAGE, status=403)
 
     def _ensure_request_id(self):
         """Return this request's correlation id, generating and storing one
