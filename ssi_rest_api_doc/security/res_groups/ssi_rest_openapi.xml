@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!-- Reuses `ssi_rest_api`'s own module category (every ssi_rest_api*
+         configurator/access group lives under it, see
+         ssi_rest_api/security/ir_module_category/ssi_rest_api.xml). -->
+    <record id="res_groups_privilege_ssi_rest_openapi" model="res.groups.privilege">
+        <field name="name">REST API Documentation</field>
+        <field name="category_id" ref="ssi_rest_api.ssi_rest_api_module_category" />
+    </record>
+
+    <!-- Gates both `ssi_rest_api_doc` routes (the OpenAPI JSON document and
+         the Swagger UI page), see controllers/main.py:_ensure_doc_group.
+         Not tied to any `ir.model.access`: this module has no persistent
+         model, only controller-gated routes. -->
+    <record id="ssi_rest_openapi_group" model="res.groups">
+        <field name="name">User</field>
+        <field name="privilege_id" ref="res_groups_privilege_ssi_rest_openapi" />
+        <field
+            name="user_ids"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+    </record>
+</odoo>

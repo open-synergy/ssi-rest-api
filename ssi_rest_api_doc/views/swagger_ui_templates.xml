@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!-- Standalone page (deliberately not inheriting `web.layout`/
+         `web.frontend_layout`): the only assets it pulls in are this
+         module's own vendored Swagger UI bundle, registered under the
+         manifest's "assets" key as `ssi_rest_api_doc.swagger_ui_assets`
+         (see controllers/main.py:openapi_ui). -->
+    <template
+        id="swagger_ui_page"
+        name="SSI REST API - Swagger UI"
+    >&lt;!DOCTYPE html&gt;
+<html>
+        <head>
+            <meta charset="utf-8" />
+            <title>SSI REST API - Documentation</title>
+            <t
+                t-call-assets="ssi_rest_api_doc.swagger_ui_assets"
+                t-js="false"
+                t-css="true"
+            />
+        </head>
+        <body>
+            <div id="swagger-ui" t-att-data-openapi-url="document_url" />
+            <t
+                t-call-assets="ssi_rest_api_doc.swagger_ui_assets"
+                t-js="true"
+                t-css="false"
+            />
+        </body>
+    </html>
+</template>
+</odoo>
