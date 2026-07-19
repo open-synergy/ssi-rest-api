@@ -22,6 +22,7 @@ Available addons
 addon | version | maintainers | summary
 --- | --- | --- | ---
 [ssi_rest_api](ssi_rest_api/) | 19.0.1.6.0 |  | SSI REST API
+[ssi_rest_api_auth_apikey](ssi_rest_api_auth_apikey/) | 19.0.1.0.0 |  | SSI REST API - API Key Authentication
 [ssi_rest_api_binary](ssi_rest_api_binary/) | 19.0.1.0.0 |  | SSI REST API - Binary
 [ssi_rest_api_doc](ssi_rest_api_doc/) | 19.0.1.0.0 |  | SSI REST API - Documentation
 [ssi_rest_api_endpoint](ssi_rest_api_endpoint/) | 19.0.1.0.0 |  | SSI REST API - Custom Endpoint
