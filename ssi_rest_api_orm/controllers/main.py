@@ -149,6 +149,10 @@ class SsiRestOrmController(http.Controller):
         records = target.create(vals_list)
         serializer = request.env["ssi_rest_serializer"]
         specification = serializer._specification_from_query(kwargs)
+        # A create response always carries "id" regardless of what the
+        # caller asked for: without it, there is no way to reference the
+        # record just created.
+        specification.setdefault("id", {})
         body = serializer._serialize(records, specification)
         return request.make_json_response(body, status=201)
 
@@ -167,6 +171,7 @@ class SsiRestOrmController(http.Controller):
         records.write(vals)
         serializer = request.env["ssi_rest_serializer"]
         specification = serializer._specification_from_query(kwargs)
+        specification.setdefault("id", {})
         return serializer._serialize(records, specification)
 
     @rest_route(
