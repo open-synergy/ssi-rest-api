@@ -10,12 +10,13 @@
         <field name="arch" type="xml">
             <data>
                 <xpath expr="//page[@name='access_rights']" position="inside">
-                    <group name="ssi_rest_api_group" string="REST API" groups="base.group_system">
+                    <group
+                        name="ssi_rest_api_group"
+                        string="REST API"
+                        groups="base.group_system"
+                    >
                         <field name="ssi_rest_enabled" />
-                        <field
-                            name="ssi_rest_profile_ids"
-                            widget="many2many_tags"
-                        />
+                        <field name="ssi_rest_profile_ids" widget="many2many_tags" />
                     </group>
                 </xpath>
             </data>

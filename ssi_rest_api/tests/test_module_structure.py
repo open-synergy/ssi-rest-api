@@ -28,7 +28,7 @@ MODULE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # (`<parent_model>.<child_label>`, e.g. "ssi_rest_access_profile.rule").
 # Extend this allowlist when a future backlog item adds a legitimate child
 # model; every other dotted, non-"mixin."-prefixed `_name` fails this test.
-ALLOWED_DOTTED_MODEL_NAMES = set()
+ALLOWED_DOTTED_MODEL_NAMES = {"ssi_rest_access_profile.rule"}
 
 # Substrings that must never appear in this module's own source: the
 # license of `muk_rest` (the functional reference for this framework)
