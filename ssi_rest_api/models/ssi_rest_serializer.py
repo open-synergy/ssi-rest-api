@@ -24,7 +24,7 @@ so every default documented here is binding, not a starting point.
 import base64
 import hashlib
 
-from odoo import api, fields, models
+from odoo import api, models
 from odoo.exceptions import ValidationError
 
 #: Sentinel key carrying global serialization options (``m2o``, ``binary``,
@@ -85,9 +85,7 @@ class SsiRestSerializer(models.AbstractModel):
                 for dotted_path in str(fields_param).split(","):
                     dotted_path = dotted_path.strip()
                     if dotted_path:
-                        self._merge_dotted_path(
-                            specification, dotted_path.split(".")
-                        )
+                        self._merge_dotted_path(specification, dotted_path.split("."))
         specification[_OPTIONS_KEY] = {
             "m2o": query.get("m2o"),
             "binary": query.get("binary"),
@@ -123,8 +121,7 @@ class SsiRestSerializer(models.AbstractModel):
     def _serialize_records(self, records, specification, options):
         self._validate_specification(records, specification)
         return [
-            self._serialize_record(record, specification, options)
-            for record in records
+            self._serialize_record(record, specification, options) for record in records
         ]
 
     def _validate_specification(self, model, specification):
@@ -151,9 +148,7 @@ class SsiRestSerializer(models.AbstractModel):
                         model=model._name,
                     )
                 )
-            self._validate_specification(
-                model.env[field.comodel_name], nested_fields
-            )
+            self._validate_specification(model.env[field.comodel_name], nested_fields)
 
     def _serialize_record(self, record, specification, options):
         record.ensure_one()

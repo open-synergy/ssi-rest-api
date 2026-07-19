@@ -74,9 +74,7 @@ class TestSsiRestSerializerSpecification(TransactionCase):
         )
 
     def test_many2one_default_is_id_and_display_name(self):
-        result = self.serializer._serialize(
-            self.partner, {"parent_id": {}}
-        )
+        result = self.serializer._serialize(self.partner, {"parent_id": {}})
         self.assertEqual(
             result[0]["parent_id"], {"id": self.parent.id, "display_name": "Parent Co"}
         )
@@ -107,9 +105,7 @@ class TestSsiRestSerializerSpecification(TransactionCase):
             {"fields": "child_ids.parent_id.name"}
         )
         result = self.serializer._serialize(self.parent, specification)
-        self.assertEqual(
-            result[0]["child_ids"], [{"parent_id": {"name": "Parent Co"}}]
-        )
+        self.assertEqual(result[0]["child_ids"], [{"parent_id": {"name": "Parent Co"}}])
 
     def test_selection_default_is_raw_value_only(self):
         result = self.serializer._serialize(self.partner, {"type": {}})
