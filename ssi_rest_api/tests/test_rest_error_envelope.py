@@ -125,7 +125,7 @@ class TestSsiRestTracebackDisclosureGate(HttpCase):
                 "name": "SSI REST Non-Admin (HTTP)",
                 "login": "ssi_rest_test_non_admin_http",
                 "email": "ssi_rest_test_non_admin_http@example.com",
-                "groups_id": [(6, 0, [self.env.ref("base.group_user").id])],
+                "group_ids": [(6, 0, [self.env.ref("base.group_user").id])],
             }
         )
 

@@ -91,7 +91,7 @@ class TestTracebackDisclosureAllowed(TransactionCase):
                 "name": "SSI REST Non-Admin",
                 "login": "ssi_rest_test_non_admin",
                 "email": "ssi_rest_test_non_admin@example.com",
-                "groups_id": [(6, 0, [self.env.ref("base.group_user").id])],
+                "group_ids": [(6, 0, [self.env.ref("base.group_user").id])],
             }
         )
         self.assertTrue(self.admin.has_group("base.group_system"))
