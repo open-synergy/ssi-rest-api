@@ -1,0 +1,143 @@
+options:
+  auto_refresh: true
+
+scenarios:
+  - name: "RS256 issuer without jwks_url is rejected"
+    steps:
+      - step: "Create RS256 issuer with no jwks_url"
+        action: "create"
+        model: "ssi_rest_jwt_issuer"
+        expect_error:
+          type: "ValidationError"
+        values:
+          name: "Issuer RS256 No JWKS"
+          issuer: "https://issuer-yaml-rs256.example.com"
+          audience: "api://ssi-rest"
+          algorithm: "RS256"
+
+  - name: "HS256 issuer without shared_secret is rejected"
+    steps:
+      - step: "Create HS256 issuer with no shared_secret"
+        action: "create"
+        model: "ssi_rest_jwt_issuer"
+        expect_error:
+          type: "ValidationError"
+        values:
+          name: "Issuer HS256 No Secret"
+          issuer: "https://issuer-yaml-hs256.example.com"
+          audience: "api://ssi-rest"
+          algorithm: "HS256"
+
+  - name: "Valid RS256 issuer is created with default fields"
+    steps:
+      - step: "Create RS256 issuer with jwks_url"
+        action: "create"
+        model: "ssi_rest_jwt_issuer"
+        save_as: "issuer_rs256"
+        values:
+          name: "Issuer RS256"
+          issuer: "https://issuer-yaml-rs256-ok.example.com"
+          audience: "api://ssi-rest"
+          algorithm: "RS256"
+          jwks_url: "https://issuer-yaml-rs256-ok.example.com/.well-known/jwks.json"
+      - step: "Assert defaults"
+        action: "assert"
+        target: "issuer_rs256"
+        asserts:
+          active:
+            type: "value"
+            expected: true
+          user_claim:
+            type: "value"
+            expected: "sub"
+          user_match_field:
+            type: "value"
+            expected: "login"
+          leeway:
+            type: "value"
+            expected: 0
+
+  - name: "Valid HS256 issuer is created"
+    steps:
+      - step: "Create HS256 issuer with shared_secret"
+        action: "create"
+        model: "ssi_rest_jwt_issuer"
+        save_as: "issuer_hs256"
+        values:
+          name: "Issuer HS256"
+          issuer: "https://issuer-yaml-hs256-ok.example.com"
+          audience: "api://ssi-rest"
+          algorithm: "HS256"
+          shared_secret: "yaml-test-secret"
+      - step: "Assert active by default"
+        action: "assert"
+        target: "issuer_hs256"
+        asserts:
+          active:
+            type: "value"
+            expected: true
+
+  - name: "JWT scheme is registered on install"
+    steps:
+      - step: "Search jwt scheme"
+        action: "search"
+        model: "ssi_rest_auth_scheme"
+        domain: [["code", "=", "jwt"]]
+        save_as: "scheme"
+        expect_count: 1
+      - step: "Assert provider model and sequence"
+        action: "assert"
+        target: "scheme"
+        asserts:
+          provider_model:
+            type: "value"
+            expected: "ssi_rest_auth_jwt"
+          active:
+            type: "value"
+            expected: true
+
+  - name: "ACL has exactly two records for ssi_rest_jwt_issuer"
+    steps:
+      - step: "Search access rules for the model"
+        action: "search"
+        model: "ir.model.access"
+        domain: [["model_id.model", "=", "ssi_rest_jwt_issuer"]]
+        save_as: "acls"
+        expect_count: 2
+
+  - name: "Two issuers can be active at the same time"
+    steps:
+      - step: "Create first issuer"
+        action: "create"
+        model: "ssi_rest_jwt_issuer"
+        save_as: "issuer_a"
+        values:
+          name: "Issuer A"
+          issuer: "https://issuer-yaml-a.example.com"
+          audience: "api://ssi-rest"
+          algorithm: "HS256"
+          shared_secret: "secret-a"
+      - step: "Create second issuer"
+        action: "create"
+        model: "ssi_rest_jwt_issuer"
+        save_as: "issuer_b"
+        values:
+          name: "Issuer B"
+          issuer: "https://issuer-yaml-b.example.com"
+          audience: "api://ssi-rest"
+          algorithm: "HS256"
+          shared_secret: "secret-b"
+      - step: "First issuer is still active"
+        action: "assert"
+        target: "issuer_a"
+        asserts:
+          active:
+            type: "value"
+            expected: true
+      - step: "Second issuer is active too"
+        action: "assert"
+        target: "issuer_b"
+        asserts:
+          active:
+            type: "value"
+            expected: true

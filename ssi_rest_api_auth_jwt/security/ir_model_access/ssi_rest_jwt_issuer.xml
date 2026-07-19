@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!-- Binding, backlog issue #19's Keputusan Desain: ssi_rest_jwt_issuer
+         is a plain model (not master data), so ACL follows the same
+         2-record pattern ssi_rest_access_profile uses, with no dedicated
+         configurator group of its own, full access limited directly to
+         base.group_system. Unlike ssi_rest_access_profile's own
+         "_all_access" (deliberately group-less so the dispatcher's
+         no-sudo() enforcement path can read it on every request, see
+         ssi_rest_api/security/ir_model_access/ssi_rest_access_profile.xml),
+         nothing here is ever read outside a sudo() context
+         (ssi_rest_auth_jwt's own lookup is always sudo(), same as
+         apikey/basic/bearer's own credential lookups) so a base.group_user
+         read-only grant is the correct, narrower default. -->
+    <record id="ssi_rest_jwt_issuer_all_access" model="ir.model.access">
+        <field name="name">ssi_rest_jwt_issuer - all</field>
+        <field name="model_id" ref="model_ssi_rest_jwt_issuer" />
+        <field name="group_id" ref="base.group_user" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="0" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+
+    <record id="ssi_rest_jwt_issuer_user_access" model="ir.model.access">
+        <field name="name">ssi_rest_jwt_issuer - user</field>
+        <field name="model_id" ref="model_ssi_rest_jwt_issuer" />
+        <field name="group_id" ref="base.group_system" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+</odoo>
