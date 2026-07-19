@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!-- Odoo 19 replaced res.groups.category_id with res.groups.privilege_id
+         (res.groups.privilege.category_id) and res.groups.users with
+         res.groups.user_ids; see base/models/res_groups.py and
+         base/models/res_groups_privilege.py. Reuses ssi_rest_api's own
+         module category, same as every other ssi_rest_api* configurator
+         group. -->
+    <record id="res_groups_privilege_ssi_rest_api_key" model="res.groups.privilege">
+        <field name="name">REST API Key</field>
+        <field name="category_id" ref="ssi_rest_api.ssi_rest_api_module_category" />
+    </record>
+
+    <!-- Administrator: sees and manages every ssi_rest_api_key record, not
+         just their own, see security/ir_rule/ssi_rest_api_key.xml. A
+         plain internal user (base.group_user) does not need this group at
+         all to manage their own keys, only to see others'. -->
+    <record id="ssi_rest_api_key_group" model="res.groups">
+        <field name="name">Administrator</field>
+        <field name="privilege_id" ref="res_groups_privilege_ssi_rest_api_key" />
+        <field
+            name="user_ids"
+            eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"
+        />
+    </record>
+</odoo>
