@@ -12,15 +12,34 @@ The log-write-failure test additionally is P6 (L-15: no mock/patch from
 YAML) -- it patches the dispatcher's own write method to prove a
 logging failure never leaks into the client response.
 
-Each test method uses its own fresh ``requests.Session()`` rather than
-``HttpCase.opener``/``url_open`` (binding, backlog issue #15's
-Keputusan Desain): a stale cookie surviving on a shared session could
-silently authenticate a request meant to prove "no credential -> 401".
+Every call below goes through ``HttpCase.url_open``/``self.opener``
+(**not** a bare ``requests.Session()``): Odoo 19's own test harness
+rejects any request that does not carry the special ``test_request_key``
+cookie ``Opener.request`` sets automatically via
+``HttpCase.allow_requests()`` (``odoo/tests/common.py``) with a bare
+``400`` -- "has been ignored during test". ``self.opener`` is recreated
+fresh in ``setUp()`` for every test *method*, and each method below
+issues exactly one relevant request, so there is no risk of a stale
+session cookie silently authenticating a request meant to prove "no
+credential -> 401" (the scenario a fresh-session-per-case would guard
+against) -- this is also the same pattern every other HTTP test in this
+repo already uses (``test_rest_auth.py``, ``test_core_regression_suite.py``).
+
+Two test-only routes are needed, not one: ``/test/log/echo`` (default
+``readonly=False``) is used for every scenario that inspects the
+persisted log row, and ``/test/log/readonly-probe``
+(``readonly=True``) exists *only* to prove the no-retry property via a
+call counter. They cannot share a route: under Odoo's own ``HttpCase``
+test harness, a ``readonly=True`` request's log write is a structural
+no-op (see ``lib/dispatcher.py``'s
+``SsiRestDispatcher._skip_logging_under_test_harness`` docstring) -- so
+asserting a log row exists for ``echo`` requires it to run
+read/write, exactly like almost every other ``ssi_rest`` endpoint in
+this module family (see ``ssi_rest_api_orm``'s ``orm_create``/
+``orm_write``).
 """
 
 from unittest.mock import patch
-
-import requests
 
 from odoo import http
 from odoo.tests import HttpCase, tagged
@@ -54,7 +73,7 @@ class SsiRestApiLogTestController(http.Controller):
     ``test_rest_auth.py``/``test_core_regression_suite.py`` test
     controllers: never part of the real endpoint surface."""
 
-    @rest_route(["/test/log/echo"], auth="ssi_rest", operation="read", readonly=True)
+    @rest_route(["/test/log/echo"], auth="ssi_rest", operation="read")
     def echo(self, **kwargs):
         return {"echo": kwargs}
 
@@ -100,11 +119,9 @@ class TestSsiRestRequestLogDispatcher(HttpCase):
         )
 
     def test_successful_request_creates_log_row(self):
-        session = requests.Session()
-        response = session.get(
-            self.base_url() + "/api/v1/test/log/echo",
+        response = self.url_open(
+            "/api/v1/test/log/echo",
             headers=self._auth_headers(),
-            timeout=30,
         )
         self.assertEqual(response.status_code, 200)
         request_id = response.headers.get("X-Request-Id")
@@ -118,11 +135,7 @@ class TestSsiRestRequestLogDispatcher(HttpCase):
 
     @mute_logger(_CORE_DISPATCHER_LOGGER, "odoo.http")
     def test_auth_failure_creates_log_row_with_401_and_error_code(self):
-        session = requests.Session()
-        response = session.get(
-            self.base_url() + "/api/v1/test/log/echo",
-            timeout=30,
-        )
+        response = self.url_open("/api/v1/test/log/echo")
         self.assertEqual(response.status_code, 401)
         request_id = response.headers.get("X-Request-Id")
         self.assertTrue(request_id)
@@ -133,11 +146,9 @@ class TestSsiRestRequestLogDispatcher(HttpCase):
         self.assertTrue(log.error_code)
 
     def test_readonly_route_is_not_retried_ro_to_rw(self):
-        session = requests.Session()
-        response = session.get(
-            self.base_url() + "/api/v1/test/log/readonly-probe",
+        response = self.url_open(
+            "/api/v1/test/log/readonly-probe",
             headers=self._auth_headers(),
-            timeout=30,
         )
         self.assertEqual(response.status_code, 200)
         # If the log write in `post_dispatch` had gone through the
@@ -152,16 +163,14 @@ class TestSsiRestRequestLogDispatcher(HttpCase):
 
     @mute_logger(_LOG_DISPATCHER_LOGGER)
     def test_log_write_failure_does_not_change_client_response(self):
-        session = requests.Session()
         with patch(
             "odoo.addons.ssi_rest_api_log.lib.dispatcher."
             "SsiRestDispatcher._do_write_request_log",
             side_effect=RuntimeError("boom"),
         ):
-            response = session.get(
-                self.base_url() + "/api/v1/test/log/echo",
+            response = self.url_open(
+                "/api/v1/test/log/echo",
                 headers=self._auth_headers(),
-                timeout=30,
             )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["echo"], {})

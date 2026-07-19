@@ -8,11 +8,14 @@ issue #15).
 Python murni -- pemicu P7 (L-19): a real HTTP POST body round-trip is
 out of reach for ``odoo-yaml-test``'s ``TransactionCase``-locked base
 class.
+
+Uses ``HttpCase.url_open`` (**not** a bare ``requests.Session()``) --
+see ``test_ssi_rest_request_log_dispatcher.py``'s module docstring for
+why a bare session fails every request with 400 under Odoo 19's own
+test harness.
 """
 
 import json
-
-import requests
 
 from odoo import http
 from odoo.tests import HttpCase, tagged
@@ -51,6 +54,9 @@ class TestSsiRestRequestLogBodyRedaction(HttpCase):
             )
         )
 
+    def _auth_headers(self):
+        return {"Authorization": f"Bearer {self.rpc_key}"}
+
     def _log_for(self, request_id):
         return (
             self.env["ssi_rest_request_log"]
@@ -62,12 +68,10 @@ class TestSsiRestRequestLogBodyRedaction(HttpCase):
         self.env["ir.config_parameter"].sudo().set_param(
             "ssi_rest_api.log_body", "True"
         )
-        session = requests.Session()
-        response = session.post(
-            self.base_url() + "/api/v1/test/log/echo-body",
+        response = self.url_open(
+            "/api/v1/test/log/echo-body",
             json={"username": "alice", "password": "super-secret"},
-            headers={"Authorization": f"Bearer {self.rpc_key}"},
-            timeout=30,
+            headers=self._auth_headers(),
         )
         self.assertEqual(response.status_code, 200)
         request_id = response.headers.get("X-Request-Id")
@@ -84,12 +88,10 @@ class TestSsiRestRequestLogBodyRedaction(HttpCase):
         self.env["ir.config_parameter"].sudo().set_param(
             "ssi_rest_api.log_body", "False"
         )
-        session = requests.Session()
-        response = session.post(
-            self.base_url() + "/api/v1/test/log/echo-body",
+        response = self.url_open(
+            "/api/v1/test/log/echo-body",
             json={"username": "alice", "password": "super-secret"},
-            headers={"Authorization": f"Bearer {self.rpc_key}"},
-            timeout=30,
+            headers=self._auth_headers(),
         )
         self.assertEqual(response.status_code, 200)
         request_id = response.headers.get("X-Request-Id")

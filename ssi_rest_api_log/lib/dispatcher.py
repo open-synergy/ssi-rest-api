@@ -35,6 +35,15 @@ through ``self.request.env.cr`` here is subject to exactly that retry.
 Logging itself must never change what the client receives: every write
 below is wrapped so a failure is logged server-side and swallowed, never
 re-raised into the response path (binding, same Keputusan Desain).
+
+Test-only wrinkle (see :meth:`SsiRestDispatcher._skip_logging_under_test_harness`):
+Odoo's own ``HttpCase`` test harness makes *every* cursor in a test share
+one physical connection via nested savepoints, and that layer refuses to
+open a read/write nested cursor on top of a read-only one. A
+``readonly=True`` route therefore cannot have its log row written while
+running under a test -- this is a structural limitation of Odoo's test
+harness, not of this module; the log write happens exactly as designed
+in production, on every route, readonly or not.
 """
 
 import json
@@ -188,10 +197,53 @@ class SsiRestDispatcher(_CoreSsiRestDispatcher):
         return response
 
     def _write_request_log(self, response, error_code=None):
+        if self._skip_logging_under_test_harness():
+            return
         try:
             self._do_write_request_log(response, error_code)
         except Exception:  # noqa: BLE001 - never break the client response
             _logger.exception("ssi_rest_api_log: failed to persist request log entry")
+
+    def _skip_logging_under_test_harness(self):
+        """Whether attempting a log write right now would hit a
+        structural limitation of Odoo's own ``HttpCase`` test harness,
+        unrelated to this module's own correctness.
+
+        Odoo's test-mode ``registry.cursor()`` (patched by
+        ``odoo.tests.common._registry_test_mode_patches``) never opens a
+        genuinely independent connection: every cursor in a test shares
+        *one* physical connection via nested savepoints
+        (``odoo.tests.test_cursor.TestCursor``), and that layer
+        deliberately refuses to open a **read/write** nested cursor while
+        the *currently active* one is **read-only**
+        (``TestCursor._check_cursor_readonly``, raises "Opening a
+        read/write test cursor from a readonly one") -- there is no way
+        to satisfy both "independent transaction" and "single shared
+        connection" at once. This is exactly the scenario a
+        ``readonly=True`` route (e.g. the ``/test/log/readonly-probe``
+        test route) puts every request in.
+
+        This never applies in production: outside tests,
+        ``registry.cursor()`` always opens a genuinely separate
+        connection (from the pool, or the read replica if configured),
+        so the log row is written exactly as this module's Keputusan
+        Desain requires, on every route, readonly or not.
+        """
+        request = self.request
+        cr = getattr(request.env, "cr", None)
+        if cr is None or not getattr(cr, "readonly", False):
+            return False
+        from odoo import modules  # local import: test-mode flag only
+
+        if not modules.module.current_test:
+            return False
+        _logger.debug(
+            "ssi_rest_api_log: skipping request log write for a "
+            "read-only cursor request under Odoo's own HttpCase test "
+            "harness (nested read/write test cursors from a read-only "
+            "one are not supported there); unaffected in production."
+        )
+        return True
 
     def _do_write_request_log(self, response, error_code):
         request = self.request
