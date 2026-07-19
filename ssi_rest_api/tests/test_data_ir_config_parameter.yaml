@@ -1,0 +1,128 @@
+scenarios:
+  - name: "Module ssi_rest_api is installed"
+    steps:
+      - step: "Search ssi_rest_api module"
+        action: "search"
+        model: "ir.module.module"
+        domain: [["name", "=", "ssi_rest_api"]]
+        save_as: "own_module"
+        expect_count: 1
+      - step: "Assert state installed"
+        action: "assert"
+        target: "own_module"
+        asserts:
+          state:
+            type: "value"
+            expected: "installed"
+
+  - name: "Dependency ssi_master_data_mixin is installed"
+    steps:
+      - step: "Search ssi_master_data_mixin module"
+        action: "search"
+        model: "ir.module.module"
+        domain: [["name", "=", "ssi_master_data_mixin"]]
+        save_as: "dep_module"
+        expect_count: 1
+      - step: "Assert state installed"
+        action: "assert"
+        target: "dep_module"
+        asserts:
+          state:
+            type: "value"
+            expected: "installed"
+
+  - name: "Default expose_traceback is False"
+    steps:
+      - step: "Search expose_traceback parameter"
+        action: "search"
+        model: "ir.config_parameter"
+        domain: [["key", "=", "ssi_rest_api.expose_traceback"]]
+        save_as: "param"
+        expect_count: 1
+      - step: "Assert default value"
+        action: "assert"
+        target: "param"
+        asserts:
+          value:
+            type: "value"
+            expected: "False"
+
+  - name: "Default default_page_size is 80"
+    steps:
+      - step: "Search default_page_size parameter"
+        action: "search"
+        model: "ir.config_parameter"
+        domain: [["key", "=", "ssi_rest_api.default_page_size"]]
+        save_as: "param"
+        expect_count: 1
+      - step: "Assert default value"
+        action: "assert"
+        target: "param"
+        asserts:
+          value:
+            type: "value"
+            expected: "80"
+
+  - name: "Default max_page_size is 1000"
+    steps:
+      - step: "Search max_page_size parameter"
+        action: "search"
+        model: "ir.config_parameter"
+        domain: [["key", "=", "ssi_rest_api.max_page_size"]]
+        save_as: "param"
+        expect_count: 1
+      - step: "Assert default value"
+        action: "assert"
+        target: "param"
+        asserts:
+          value:
+            type: "value"
+            expected: "1000"
+
+  - name: "Default cors_origins is empty"
+    steps:
+      - step: "Search cors_origins parameter"
+        action: "search"
+        model: "ir.config_parameter"
+        domain: [["key", "=", "ssi_rest_api.cors_origins"]]
+        save_as: "param"
+        expect_count: 1
+      - step: "Assert default value"
+        action: "assert"
+        target: "param"
+        asserts:
+          value:
+            type: "value"
+            expected: ""
+
+  - name: "Default log_retention_days is 30"
+    steps:
+      - step: "Search log_retention_days parameter"
+        action: "search"
+        model: "ir.config_parameter"
+        domain: [["key", "=", "ssi_rest_api.log_retention_days"]]
+        save_as: "param"
+        expect_count: 1
+      - step: "Assert default value"
+        action: "assert"
+        target: "param"
+        asserts:
+          value:
+            type: "value"
+            expected: "30"
+
+  - name: "Default log_body is False"
+    steps:
+      - step: "Search log_body parameter"
+        action: "search"
+        model: "ir.config_parameter"
+        domain: [["key", "=", "ssi_rest_api.log_body"]]
+        save_as: "param"
+        expect_count: 1
+      - step: "Assert default value"
+        action: "assert"
+        target: "param"
+        asserts:
+          value:
+            type: "value"
+            expected: "False"
