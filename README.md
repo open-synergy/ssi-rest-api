@@ -21,7 +21,7 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
-[ssi_rest_api](ssi_rest_api/) | 19.0.1.5.0 |  | SSI REST API
+[ssi_rest_api](ssi_rest_api/) | 19.0.1.6.0 |  | SSI REST API
 
 [//]: # (end addons)
 
