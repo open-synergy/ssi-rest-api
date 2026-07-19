@@ -170,6 +170,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_basic__display_name
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_bearer__display_name
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_scheme__display_name
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_serializer__display_name
 msgid "Display Name"
 msgstr ""
 
@@ -203,6 +204,14 @@ msgstr ""
 msgid ""
 "Evaluation order among this profile's rules; lower runs first, first match "
 "wins. No default: every rule must state its own position explicitly."
+msgstr ""
+
+#. module: ssi_rest_api
+#. odoo-python
+#: code:addons/ssi_rest_api/models/ssi_rest_serializer.py:0
+msgid ""
+"Field %(field)s on model %(model)s is not relational, it cannot carry a "
+"nested specification."
 msgstr ""
 
 #. module: ssi_rest_api
@@ -255,6 +264,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_basic__id
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_bearer__id
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_scheme__id
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_serializer__id
 msgid "ID"
 msgstr ""
 
@@ -483,6 +493,11 @@ msgid "REST Authentication Scheme"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model,name:ssi_rest_api.model_ssi_rest_serializer
+msgid "REST Serializer"
+msgstr ""
+
+#. module: ssi_rest_api
 #: model:ir.model.fields,help:ssi_rest_api.field_res_users__ssi_rest_profile_ids
 msgid ""
 "REST access profiles granted to this user, in addition to any profile "
@@ -553,6 +568,12 @@ msgstr ""
 #. module: ssi_rest_api
 #: model:ir.model.fields,help:ssi_rest_api.field_ssi_rest_access_profile__code
 msgid "Unique technical identifier for this access profile."
+msgstr ""
+
+#. module: ssi_rest_api
+#. odoo-python
+#: code:addons/ssi_rest_api/models/ssi_rest_serializer.py:0
+msgid "Unknown field %(field)s on model %(model)s."
 msgstr ""
 
 #. module: ssi_rest_api
