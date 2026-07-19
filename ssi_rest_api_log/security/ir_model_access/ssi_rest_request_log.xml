@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!-- Binding, backlog issue #15's Keputusan Desain: this is an audit
+         log, not user data, only base.group_system may even read it,
+         and no group is granted create/write/unlink from the UI at all
+         (rows are written server-side, through a superuser environment
+         on a cursor independent of any request/UI transaction; see
+         lib/dispatcher.py). This deliberately does NOT follow the usual
+         "every internal user can at least read" pattern. -->
+    <record id="ssi_rest_request_log_system_access" model="ir.model.access">
+        <field name="name">ssi_rest_request_log - system</field>
+        <field name="model_id" ref="model_ssi_rest_request_log" />
+        <field name="group_id" ref="base.group_system" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="0" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+</odoo>

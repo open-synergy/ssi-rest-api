@@ -1,0 +1,23 @@
+scenarios:
+  - name: "Non-system user cannot create a request log row"
+    steps:
+      - step: "Create plain internal user"
+        action: "create"
+        model: "res.users"
+        save_as: "plain_user"
+        values:
+          name: "Plain Internal User"
+          login: "ssi_rest_request_log_plain_user@example.com"
+          email: "ssi_rest_request_log_plain_user@example.com"
+          group_ids: [[6, 0, ["REF: base.group_user"]]]
+      - step: "Plain user tries to create a log row directly, must be denied"
+        action: "create"
+        model: "ssi_rest_request_log"
+        as_user: "plain_user"
+        expect_error:
+          type: "AccessError"
+        values:
+          request_id: "should-not-be-created"
+          http_method: "GET"
+          path: "/api/v1/ping"
+          status_code: 200

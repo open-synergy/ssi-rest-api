@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!-- Standalone views (this model inherits no SSI mixin, and no group
+         is ever granted create/write/unlink from the UI, see
+         security/ir_model_access/ssi_rest_request_log.xml). -->
+    <record id="ssi_rest_request_log_view_search" model="ir.ui.view">
+        <field name="name">ssi_rest_request_log - search</field>
+        <field name="model">ssi_rest_request_log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="request_id" />
+                <field name="path" />
+                <field name="model_name" />
+                <field name="user_id" />
+                <field name="error_code" />
+                <separator />
+                <filter
+                    name="filter_failed"
+                    string="Failed"
+                    domain="[('status_code', '>=', 400)]"
+                />
+                <filter
+                    name="filter_succeeded"
+                    string="Succeeded"
+                    domain="[('status_code', '&lt;', 400)]"
+                />
+                <separator />
+                <filter
+                    name="group_by_http_method"
+                    string="HTTP Method"
+                    context="{'group_by': 'http_method'}"
+                />
+                <filter
+                    name="group_by_model_name"
+                    string="Model"
+                    context="{'group_by': 'model_name'}"
+                />
+                <filter
+                    name="group_by_status_code"
+                    string="Status Code"
+                    context="{'group_by': 'status_code'}"
+                />
+                <filter
+                    name="group_by_user_id"
+                    string="User"
+                    context="{'group_by': 'user_id'}"
+                />
+            </search>
+        </field>
+    </record>
+
+    <record id="ssi_rest_request_log_view_list" model="ir.ui.view">
+        <field name="name">ssi_rest_request_log - list</field>
+        <field name="model">ssi_rest_request_log</field>
+        <field name="arch" type="xml">
+            <list create="false" edit="false" delete="false" default_order="id desc">
+                <field name="create_date" string="Date" />
+                <field name="request_id" />
+                <field name="user_id" />
+                <field name="http_method" />
+                <field name="path" />
+                <field name="status_code" />
+                <field name="duration_ms" />
+                <field name="error_code" />
+            </list>
+        </field>
+    </record>
+
+    <record id="ssi_rest_request_log_view_form" model="ir.ui.view">
+        <field name="name">ssi_rest_request_log - form</field>
+        <field name="model">ssi_rest_request_log</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false" delete="false">
+                <sheet>
+                    <group name="group_1">
+                        <group name="group_1_left">
+                            <field name="request_id" />
+                            <field name="user_id" />
+                            <field name="auth_scheme" />
+                            <field name="http_method" />
+                            <field name="path" />
+                            <field name="route_pattern" />
+                        </group>
+                        <group name="group_1_right">
+                            <field name="status_code" />
+                            <field name="duration_ms" />
+                            <field name="remote_addr" />
+                            <field name="user_agent" />
+                            <field name="model_name" />
+                            <field name="method_name" />
+                            <field name="record_count" />
+                            <field name="response_size" />
+                            <field name="error_code" />
+                        </group>
+                    </group>
+                    <group name="group_2">
+                        <field name="request_body" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ssi_rest_request_log_action" model="ir.actions.act_window">
+        <field name="name">Request Log</field>
+        <field name="res_model">ssi_rest_request_log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="ssi_rest_request_log_menu"
+        name="Request Log"
+        parent="ssi_rest_api.menu_ssi_rest_api_root"
+        action="ssi_rest_request_log_action"
+        groups="base.group_system"
+        sequence="50"
+    />
+</odoo>
