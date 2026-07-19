@@ -41,12 +41,20 @@ class TestRestRoute(TransactionCase):
         self.assertFalse(routing["csrf"])
 
     def test_routing_carries_rest_schemes_and_operation_kwargs(self):
-        wrapped = rest_route(["/thing"], schemes="dummy-schema", operation="dummy-op")(
-            _dummy
-        )
+        wrapped = rest_route(
+            ["/thing"],
+            schemes="dummy-schema",
+            operation="dummy-op",
+            model="dummy.model",
+        )(_dummy)
         routing = wrapped.original_routing
         self.assertEqual(routing["rest_schemes"], "dummy-schema")
         self.assertEqual(routing["rest_operation"], "dummy-op")
+        self.assertEqual(routing["rest_model"], "dummy.model")
+
+    def test_routing_rest_model_defaults_to_none(self):
+        wrapped = rest_route(["/thing"])(_dummy)
+        self.assertIsNone(wrapped.original_routing["rest_model"])
 
     def test_single_path_string_is_accepted(self):
         wrapped = rest_route("/thing")(_dummy)

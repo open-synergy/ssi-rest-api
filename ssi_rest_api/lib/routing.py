@@ -15,7 +15,12 @@ from .constants import PATH_PREFIX, SUPPORTED_VERSIONS
 
 
 def rest_route(
-    paths, versions=SUPPORTED_VERSIONS, schemes=None, operation=None, **routing
+    paths,
+    versions=SUPPORTED_VERSIONS,
+    schemes=None,
+    operation=None,
+    model=None,
+    **routing,
 ):
     """Expose a controller method under ``/api/v<n><path>`` for every
     version in ``versions``, dispatched by :class:`.dispatcher.SsiRestDispatcher`.
@@ -32,9 +37,17 @@ def rest_route(
         schema, forwarded as-is to ``routing['rest_schemes']`` for a later
         backlog item (serializer/schema validation) to consume. Not
         interpreted here.
-    :param operation: opaque operation identifier, forwarded as-is to
-        ``routing['rest_operation']`` for later use (e.g. by logging or the
-        future error envelope). Not interpreted here.
+    :param operation: operation identifier forwarded as-is to
+        ``routing['rest_operation']``. Consumed by access-profile rule
+        matching (``ssi_rest_access_profile.rule.operation``) when it is
+        one of ``read``/``write``/``create``/``unlink``/``call``; any
+        other value (including ``None``) simply never equals a rule's
+        specific operation, only its ``any`` wildcard.
+    :param model: target Odoo model technical name this endpoint operates
+        on, forwarded as-is to ``routing['rest_model']``. ``None`` for
+        endpoints with no single target model (e.g. ``/ping``); consumed
+        by access-profile rule matching (``model_pattern``) the same way
+        an empty pattern matches every model.
     :param routing: any other kwarg accepted by :func:`odoo.http.route`
         (``auth``, ``methods``, ...). ``type``, ``save_session`` and
         ``csrf`` are always overridden below and must not be passed in.
@@ -56,5 +69,6 @@ def rest_route(
     routing["rest_version"] = versions
     routing["rest_schemes"] = schemes
     routing["rest_operation"] = operation
+    routing["rest_model"] = model
 
     return route(expanded_routes, **routing)

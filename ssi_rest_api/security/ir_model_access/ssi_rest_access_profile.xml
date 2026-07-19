@@ -4,11 +4,19 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
     <!-- ssi_rest_access_profile: no dedicated group (issue #6 Keputusan
-         Desain) — full access limited to base.group_system directly. -->
+         Desain) — full access limited to base.group_system directly.
+
+         "_all_access" deliberately has NO group_id (readable by every
+         user, including the public user on auth="public" routes): issue
+         #7's dispatcher enforcement (`SsiRestDispatcher.pre_dispatch` ->
+         `_enforce_access_profile`) must read this table on EVERY ssi_rest
+         request to decide whether a profile applies, and issue #7's
+         binding subtractive-only invariant forbids `sudo()` anywhere on
+         that path — narrowing this ACL to an internal-user-only group
+         would raise AccessError on every public-auth request instead. -->
     <record id="ssi_rest_access_profile_all_access" model="ir.model.access">
         <field name="name">ssi_rest_access_profile - all</field>
         <field name="model_id" ref="model_ssi_rest_access_profile" />
-        <field name="group_id" ref="base.group_user" />
         <field name="perm_read" eval="1" />
         <field name="perm_write" eval="0" />
         <field name="perm_create" eval="0" />
@@ -26,11 +34,13 @@
     </record>
 
     <!-- Child model: no group of its own, ACL follows the parent's
-         base.group_system (06-security.md "Model Detail/Child"). -->
+         base.group_system (06-security.md "Model Detail/Child"). "_all_access"
+         has no group_id for the same reason as the parent's above: rule
+         matching (`rule._matches_request`) is read via `profile.rule_ids`
+         on the same no-sudo() enforcement path. -->
     <record id="ssi_rest_access_profile_rule_all_access" model="ir.model.access">
         <field name="name">ssi_rest_access_profile.rule - all</field>
         <field name="model_id" ref="model_ssi_rest_access_profile_rule" />
-        <field name="group_id" ref="base.group_user" />
         <field name="perm_read" eval="1" />
         <field name="perm_write" eval="0" />
         <field name="perm_create" eval="0" />
