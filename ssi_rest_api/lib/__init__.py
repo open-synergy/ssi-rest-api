@@ -3,6 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from . import constants  # noqa: F401
+from . import auth  # noqa: F401
 from . import errors  # noqa: F401
 
 # `dispatcher` MUST be imported before any `controllers/` module: importing

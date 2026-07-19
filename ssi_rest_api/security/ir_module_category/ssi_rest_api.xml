@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <!-- Module-wide category: every ssi_rest_api* configurator group (this
+         one and the ones later backlog items add — auth providers, access
+         profile, endpoint, ...) is grouped under it. -->
+    <record id="ssi_rest_api_module_category" model="ir.module.category">
+        <field name="name">REST API</field>
+    </record>
+</odoo>

@@ -1,0 +1,177 @@
+options:
+  auto_refresh: true
+
+scenarios:
+  - name: "Create REST auth scheme"
+    steps:
+      - step: "Create scheme"
+        action: "create"
+        model: "ssi_rest_auth_scheme"
+        save_as: "scheme"
+        values:
+          name: "Dummy Scheme"
+          code: "dummy_create"
+          provider_model: "mixin.rest_authenticator"
+          sequence: 15
+      - step: "Assert created"
+        action: "assert"
+        target: "scheme"
+        asserts:
+          id:
+            type: "value"
+            operator: "is_truthy"
+          name:
+            type: "value"
+            expected: "Dummy Scheme"
+          code:
+            type: "value"
+            expected: "dummy_create"
+          provider_model:
+            type: "value"
+            expected: "mixin.rest_authenticator"
+          sequence:
+            type: "value"
+            expected: 15
+          active:
+            type: "value"
+            expected: true
+
+  - name: "Edit REST auth scheme provider_model"
+    steps:
+      - step: "Create scheme"
+        action: "create"
+        model: "ssi_rest_auth_scheme"
+        save_as: "scheme"
+        values:
+          name: "Dummy Scheme"
+          code: "dummy_edit"
+          provider_model: "mixin.rest_authenticator"
+      - step: "Write new provider_model and sequence"
+        action: "write"
+        target: "scheme"
+        values:
+          provider_model: "mixin.rest_authenticator.v2"
+          sequence: 25
+      - step: "Assert updated"
+        action: "assert"
+        target: "scheme"
+        asserts:
+          provider_model:
+            type: "value"
+            expected: "mixin.rest_authenticator.v2"
+          sequence:
+            type: "value"
+            expected: 25
+
+  - name: "Delete REST auth scheme"
+    steps:
+      - step: "Create scheme"
+        action: "create"
+        model: "ssi_rest_auth_scheme"
+        save_as: "scheme"
+        values:
+          name: "Dummy Scheme"
+          code: "dummy_delete"
+          provider_model: "mixin.rest_authenticator"
+      - step: "Delete scheme"
+        action: "unlink"
+        target: "scheme"
+      - step: "Verify deleted"
+        action: "search"
+        model: "ssi_rest_auth_scheme"
+        domain: [["code", "=", "dummy_delete"]]
+        save_as: "result"
+        expect_count: 0
+
+  - name: "Duplicate code ditolak"
+    steps:
+      - step: "Create first scheme"
+        action: "create"
+        model: "ssi_rest_auth_scheme"
+        save_as: "first"
+        values:
+          name: "Dummy Scheme A"
+          code: "dummy_dup"
+          provider_model: "mixin.rest_authenticator"
+      - step: "Create second scheme with same code must fail"
+        action: "create"
+        model: "ssi_rest_auth_scheme"
+        expect_error:
+          type: "UserError"
+          message_contains: "Duplicate code"
+        values:
+          name: "Dummy Scheme B"
+          code: "dummy_dup"
+          provider_model: "mixin.rest_authenticator"
+
+  - name: "Configurator can create and write, plain user can only read"
+    steps:
+      - step: "Create configurator user"
+        action: "create"
+        model: "res.users"
+        save_as: "configurator"
+        context:
+          no_reset_password: true
+        values:
+          name: "Scheme Configurator"
+          login: "ssi_rest_auth_scheme_configurator@example.com"
+          email: "ssi_rest_auth_scheme_configurator@example.com"
+          group_ids:
+            - - 6
+              - 0
+              - - "REF: ssi_rest_api.ssi_rest_auth_scheme_group"
+      - step: "Create plain internal user"
+        action: "create"
+        model: "res.users"
+        save_as: "plain_user"
+        context:
+          no_reset_password: true
+        values:
+          name: "Plain User"
+          login: "ssi_rest_auth_scheme_plain_user@example.com"
+          email: "ssi_rest_auth_scheme_plain_user@example.com"
+          group_ids:
+            - - 6
+              - 0
+              - - "REF: base.group_user"
+      - step: "Configurator creates a scheme"
+        action: "create"
+        model: "ssi_rest_auth_scheme"
+        save_as: "scheme"
+        as_user: "configurator"
+        values:
+          name: "Dummy Scheme"
+          code: "dummy_acl"
+          provider_model: "mixin.rest_authenticator"
+      - step: "Configurator writes the scheme"
+        action: "write"
+        target: "scheme"
+        as_user: "configurator"
+        values:
+          sequence: 30
+      - step: "Plain user can read the scheme"
+        action: "assert"
+        target: "scheme"
+        as_user: "plain_user"
+        asserts:
+          code:
+            type: "value"
+            expected: "dummy_acl"
+      - step: "Plain user cannot write the scheme"
+        action: "write"
+        target: "scheme"
+        as_user: "plain_user"
+        expect_error:
+          type: "AccessError"
+        values:
+          sequence: 40
+      - step: "Plain user cannot create a scheme"
+        action: "create"
+        model: "ssi_rest_auth_scheme"
+        as_user: "plain_user"
+        expect_error:
+          type: "AccessError"
+        values:
+          name: "Another Scheme"
+          code: "another"
+          provider_model: "mixin.rest_authenticator"

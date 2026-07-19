@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="ssi_rest_auth_scheme_view_search" model="ir.ui.view">
+        <field name="name">ssi_rest_auth_scheme - search</field>
+        <field name="model">ssi_rest_auth_scheme</field>
+        <field
+            name="inherit_id"
+            ref="ssi_master_data_mixin.mixin_master_data_view_search"
+        />
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <data />
+        </field>
+    </record>
+
+    <record id="ssi_rest_auth_scheme_view_list" model="ir.ui.view">
+        <field name="name">ssi_rest_auth_scheme - list</field>
+        <field name="model">ssi_rest_auth_scheme</field>
+        <field
+            name="inherit_id"
+            ref="ssi_master_data_mixin.mixin_master_data_view_tree"
+        />
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="provider_model" />
+                    <field name="sequence" />
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="ssi_rest_auth_scheme_view_form" model="ir.ui.view">
+        <field name="name">ssi_rest_auth_scheme - form</field>
+        <field name="model">ssi_rest_auth_scheme</field>
+        <field
+            name="inherit_id"
+            ref="ssi_master_data_mixin.mixin_master_data_view_form"
+        />
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//notebook/page[@name='note']" position="before">
+                    <page name="registration" string="Registration">
+                        <group name="registration_group_1" string="Provider">
+                            <field name="provider_model" />
+                            <field name="sequence" />
+                        </group>
+                    </page>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <record id="ssi_rest_auth_scheme_action" model="ir.actions.act_window">
+        <field name="name">REST Authentication Scheme</field>
+        <field name="res_model">ssi_rest_auth_scheme</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="ssi_rest_auth_scheme_menu"
+        parent="menu_ssi_rest_api_configuration"
+        action="ssi_rest_auth_scheme_action"
+        groups="base.group_system"
+    />
+</odoo>
