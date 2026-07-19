@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 OpenSynergy Indonesia
+     Copyright 2026 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="ssi_rest_jwt_issuer_view_search" model="ir.ui.view">
+        <field name="name">ssi_rest_jwt_issuer - search</field>
+        <field name="model">ssi_rest_jwt_issuer</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" />
+                <field name="issuer" />
+                <field name="audience" />
+                <filter
+                    name="dom_active"
+                    string="Active"
+                    domain="[('active', '=', True)]"
+                />
+                <filter
+                    name="dom_inactive"
+                    string="Inactive"
+                    domain="[('active', '=', False)]"
+                />
+            </search>
+        </field>
+    </record>
+
+    <record id="ssi_rest_jwt_issuer_view_list" model="ir.ui.view">
+        <field name="name">ssi_rest_jwt_issuer - list</field>
+        <field name="model">ssi_rest_jwt_issuer</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" />
+                <field name="issuer" />
+                <field name="audience" />
+                <field name="algorithm" />
+                <field name="profile_id" />
+                <field name="active" widget="boolean_toggle" />
+            </list>
+        </field>
+    </record>
+
+    <record id="ssi_rest_jwt_issuer_view_form" model="ir.ui.view">
+        <field name="name">ssi_rest_jwt_issuer - form</field>
+        <field name="model">ssi_rest_jwt_issuer</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="active" widget="boolean_toggle" />
+                    </div>
+                    <group name="group_1">
+                        <field name="name" />
+                        <field name="issuer" />
+                        <field name="audience" />
+                        <field name="algorithm" />
+                        <field
+                            name="jwks_url"
+                            invisible="algorithm in ('HS256', 'HS384', 'HS512')"
+                        />
+                        <field
+                            name="shared_secret"
+                            invisible="algorithm not in ('HS256', 'HS384', 'HS512')"
+                            groups="base.group_system"
+                        />
+                    </group>
+                    <group name="group_2" string="User Mapping">
+                        <field name="user_claim" />
+                        <field name="user_match_field" />
+                        <field name="profile_id" />
+                    </group>
+                    <group name="group_3" string="Time Validation">
+                        <field name="leeway" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ssi_rest_jwt_issuer_action" model="ir.actions.act_window">
+        <field name="name">JWT Issuer</field>
+        <field name="res_model">ssi_rest_jwt_issuer</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem
+        id="ssi_rest_jwt_issuer_menu"
+        parent="ssi_rest_api.menu_ssi_rest_api_configuration"
+        action="ssi_rest_jwt_issuer_action"
+        groups="base.group_system"
+    />
+</odoo>
