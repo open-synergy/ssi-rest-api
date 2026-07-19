@@ -22,6 +22,7 @@ Available addons
 addon | version | maintainers | summary
 --- | --- | --- | ---
 [ssi_rest_api](ssi_rest_api/) | 19.0.1.6.0 |  | SSI REST API
+[ssi_rest_api_binary](ssi_rest_api_binary/) | 19.0.1.0.0 |  | SSI REST API - Binary
 [ssi_rest_api_introspection](ssi_rest_api_introspection/) | 19.0.1.0.0 |  | SSI REST API - Introspection
 [ssi_rest_api_orm](ssi_rest_api_orm/) | 19.0.1.0.0 |  | SSI REST API - ORM
 
