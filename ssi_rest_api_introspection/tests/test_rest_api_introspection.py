@@ -39,7 +39,9 @@ class TestSsiRestApiIntrospection(HttpCase):
         return {"Authorization": f"Bearer {self.rpc_key}"}
 
     def test_models_list_only_contains_readable_models(self):
-        response = self.url_open("/api/v1/introspection/models", headers=self._headers())
+        response = self.url_open(
+            "/api/v1/introspection/models", headers=self._headers()
+        )
         self.assertEqual(response.status_code, 200)
         models = {entry["model"] for entry in response.json()}
         # res.partner: readable by base.group_user (see
