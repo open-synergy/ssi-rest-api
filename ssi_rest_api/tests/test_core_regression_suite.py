@@ -110,7 +110,7 @@ class TestSsiRestAccessProfileNeverExceedsAcl(HttpCase):
             ._generate(scope="rpc", name="regression key", expiration_date=None)
         )
 
-    @mute_logger(_DISPATCHER_LOGGER)
+    @mute_logger(_DISPATCHER_LOGGER, "odoo.http")
     def test_allow_everything_profile_does_not_bypass_real_acl(self):
         response = self.url_open(
             "/api/v1/test/restricted-write",
