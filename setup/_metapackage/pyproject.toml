@@ -1,10 +1,11 @@
 [project]
 name = "odoo-addons-open-synergy-ssi-rest-api"
-version = "19.0.20260719.9"
+version = "19.0.20260719.10"
 dependencies = [
     "odoo-addon-ssi_rest_api==19.0.*",
     "odoo-addon-ssi_rest_api_auth_apikey==19.0.*",
     "odoo-addon-ssi_rest_api_auth_jwt==19.0.*",
+    "odoo-addon-ssi_rest_api_auth_oauth2==19.0.*",
     "odoo-addon-ssi_rest_api_binary==19.0.*",
     "odoo-addon-ssi_rest_api_doc==19.0.*",
     "odoo-addon-ssi_rest_api_endpoint==19.0.*",
