@@ -1,0 +1,263 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ssi_rest_api_log
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__auth_scheme
+msgid "Auth Scheme"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,help:ssi_rest_api_log.field_ssi_rest_request_log__user_id
+msgid ""
+"Authenticated user this request ran as (the public user for an "
+"unauthenticated auth='public' request)."
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,help:ssi_rest_api_log.field_ssi_rest_request_log__record_count
+msgid "Best-effort count of records the response body carried."
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,help:ssi_rest_api_log.field_ssi_rest_request_log__remote_addr
+msgid "Client IP address as seen by the WSGI server."
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,help:ssi_rest_api_log.field_ssi_rest_request_log__auth_scheme
+msgid ""
+"Code of the ssi_rest_auth_scheme that authenticated this request (e.g. "
+"'basic', 'bearer'); empty when authentication never completed (e.g. no "
+"credential at all)."
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,help:ssi_rest_api_log.field_ssi_rest_request_log__request_id
+msgid ""
+"Correlation id carried by the X-Request-Id response header for this request,"
+" letting a client-reported issue be matched back to this row."
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_log.ssi_rest_request_log_view_list
+msgid "Date"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__duration_ms
+msgid "Duration Ms"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__error_code
+msgid "Error Code"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_log.ssi_rest_request_log_view_search
+msgid "Failed"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_log.ssi_rest_request_log_view_search
+msgid "HTTP Method"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,help:ssi_rest_api_log.field_ssi_rest_request_log__http_method
+msgid "HTTP method of the request (GET, POST, ...)."
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,help:ssi_rest_api_log.field_ssi_rest_request_log__status_code
+msgid "HTTP status code returned to the client."
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__http_method
+msgid "Http Method"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__id
+msgid "ID"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__method_name
+msgid "Method Name"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_log.ssi_rest_request_log_view_search
+msgid "Model"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__model_name
+msgid "Model Name"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,help:ssi_rest_api_log.field_ssi_rest_request_log__model_name
+msgid ""
+"Odoo model this request targeted, when the route operates on a single model."
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,help:ssi_rest_api_log.field_ssi_rest_request_log__method_name
+msgid ""
+"Operation or method name this request invoked (e.g. 'read', 'create', or a "
+"called method's name)."
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__path
+msgid "Path"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model,name:ssi_rest_api_log.model_ssi_rest_request_log
+msgid "REST Request Log"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,help:ssi_rest_api_log.field_ssi_rest_request_log__user_agent
+msgid "Raw User-Agent request header."
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,help:ssi_rest_api_log.field_ssi_rest_request_log__path
+msgid "Raw request path, e.g. /api/v1/orm/res.partner/search."
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__record_count
+msgid "Record Count"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,help:ssi_rest_api_log.field_ssi_rest_request_log__request_body
+msgid ""
+"Redacted request body, only ever populated when the ssi_rest_api.log_body "
+"system parameter is enabled. Always empty otherwise; credential-shaped keys "
+"(password, token, secret, authorization, ...) are always redacted even when "
+"enabled."
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__remote_addr
+msgid "Remote Addr"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__request_id
+msgid "Request"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__request_body
+msgid "Request Body"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.actions.act_window,name:ssi_rest_api_log.ssi_rest_request_log_action
+#: model:ir.ui.menu,name:ssi_rest_api_log.ssi_rest_request_log_menu
+msgid "Request Log"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__response_size
+msgid "Response Size"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__route_pattern
+msgid "Route Pattern"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,help:ssi_rest_api_log.field_ssi_rest_request_log__response_size
+msgid "Size, in bytes, of the response body sent to the client."
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,help:ssi_rest_api_log.field_ssi_rest_request_log__error_code
+msgid ""
+"Stable error envelope code (see ssi_rest_api's lib/errors.py) for a failed "
+"request; empty on success."
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__status_code
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_log.ssi_rest_request_log_view_search
+msgid "Status Code"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_log.ssi_rest_request_log_view_search
+msgid "Succeeded"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__user_id
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api_log.ssi_rest_request_log_view_search
+msgid "User"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,field_description:ssi_rest_api_log.field_ssi_rest_request_log__user_agent
+msgid "User Agent"
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,help:ssi_rest_api_log.field_ssi_rest_request_log__duration_ms
+msgid ""
+"Wall-clock time, in milliseconds, between this request entering the "
+"dispatcher and its response being ready."
+msgstr ""
+
+#. module: ssi_rest_api_log
+#: model:ir.model.fields,help:ssi_rest_api_log.field_ssi_rest_request_log__route_pattern
+msgid ""
+"Werkzeug rule pattern that matched this request, e.g. "
+"/api/v1/orm/<string:model>/search. Empty when the request never reached "
+"routing (e.g. authentication failed first)."
+msgstr ""
