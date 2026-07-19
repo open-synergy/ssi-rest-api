@@ -112,9 +112,18 @@ class TestSsiRestApiEndpoint(HttpCase):
             }
         )
         self.assertTrue(endpoint.active)
+        # `fields` must arrive as a real list for `read()` — a query
+        # string cannot express that (this module's wildcard route does
+        # no coercion, unlike ssi_rest_api_orm's
+        # `_specification_from_query`), so it travels in a JSON body even
+        # though the endpoint's own http_method is GET (`method="GET"`
+        # overrides `url_open`'s default of switching to POST whenever a
+        # `json=` payload is given).
         response = self.url_open(
             f"/api/v1/x/{endpoint.path}?ids={self.partner.id}",
             headers=self._headers(),
+            json={"fields": ["name"]},
+            method="GET",
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["result"][0]["name"], self.partner.name)
@@ -135,6 +144,8 @@ class TestSsiRestApiEndpoint(HttpCase):
         response = self.url_open(
             f"/api/v1/x/{endpoint.path}?ids={self.partner.id}",
             headers=self._headers(),
+            json={"fields": ["name"]},
+            method="GET",
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["result"][0]["name"], self.partner.name)
@@ -240,6 +251,8 @@ class TestSsiRestApiEndpoint(HttpCase):
         response = self.url_open(
             f"/api/v1/x/{endpoint.path}?ids={self.partner.id}",
             headers=self._headers(),
+            json={"fields": ["name"]},
+            method="GET",
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["result"][0]["name"], self.partner.name)
