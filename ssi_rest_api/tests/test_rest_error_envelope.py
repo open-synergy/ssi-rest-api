@@ -28,6 +28,9 @@ caller without turning the endpoint into an ``auth="user"`` route.
 from odoo import http
 from odoo.exceptions import AccessError, LockError, MissingError, UserError
 from odoo.tests import HttpCase, tagged
+from odoo.tools import mute_logger
+
+_DISPATCHER_LOGGER = "odoo.addons.ssi_rest_api.lib.dispatcher"
 
 from odoo.addons.ssi_rest_api.lib.dispatcher import REQUEST_ID_HEADER
 from odoo.addons.ssi_rest_api.lib.routing import rest_route
@@ -65,6 +68,7 @@ class TestSsiRestSuccessEnvelope(HttpCase):
 
 @tagged("post_install", "-at_install")
 class TestSsiRestErrorEnvelope(HttpCase):
+    @mute_logger(_DISPATCHER_LOGGER)
     def test_missing_error_is_404_missing_record(self):
         response = self.url_open("/api/v1/test-error?kind=missing")
         self.assertEqual(response.status_code, 404)
@@ -72,6 +76,7 @@ class TestSsiRestErrorEnvelope(HttpCase):
         self.assertEqual(error["code"], "missing_record")
         self.assertEqual(error["status"], 404)
 
+    @mute_logger(_DISPATCHER_LOGGER)
     def test_user_error_is_422_validation_error(self):
         response = self.url_open("/api/v1/test-error?kind=validation")
         self.assertEqual(response.status_code, 422)
@@ -79,6 +84,7 @@ class TestSsiRestErrorEnvelope(HttpCase):
         self.assertEqual(error["code"], "validation_error")
         self.assertEqual(error["status"], 422)
 
+    @mute_logger(_DISPATCHER_LOGGER)
     def test_lock_error_is_409_lock_error(self):
         response = self.url_open("/api/v1/test-error?kind=lock")
         self.assertEqual(response.status_code, 409)
@@ -86,12 +92,14 @@ class TestSsiRestErrorEnvelope(HttpCase):
         self.assertEqual(error["code"], "lock_error")
         self.assertEqual(error["status"], 409)
 
+    @mute_logger(_DISPATCHER_LOGGER)
     def test_error_body_request_id_matches_response_header(self):
         response = self.url_open("/api/v1/test-error?kind=missing")
         error = response.json()["error"]
         self.assertTrue(error["request_id"])
         self.assertEqual(error["request_id"], response.headers.get(REQUEST_ID_HEADER))
 
+    @mute_logger(_DISPATCHER_LOGGER)
     def test_access_error_message_does_not_leak_model_or_field(self):
         response = self.url_open("/api/v1/test-error?kind=access")
         self.assertEqual(response.status_code, 403)
@@ -100,6 +108,7 @@ class TestSsiRestErrorEnvelope(HttpCase):
         self.assertNotIn("secret.config", error["message"])
         self.assertNotIn("Secret Configuration", error["message"])
 
+    @mute_logger(_DISPATCHER_LOGGER, "odoo.http")
     def test_unclassified_exception_is_500_internal_error_without_traceback(self):
         # Regression (binding): with `expose_traceback` at its default
         # (`False`), no response may ever contain a raw Python traceback,
@@ -129,6 +138,7 @@ class TestSsiRestTracebackDisclosureGate(HttpCase):
             }
         )
 
+    @mute_logger(_DISPATCHER_LOGGER, "odoo.http")
     def test_group_system_user_with_icp_true_sees_traceback_in_details(self):
         self.icp.set_param("ssi_rest_api.expose_traceback", "True")
         self.authenticate("admin", "admin")
@@ -138,6 +148,7 @@ class TestSsiRestTracebackDisclosureGate(HttpCase):
         traceback_text = error["details"]["traceback"]
         self.assertIn("Traceback (most recent call last)", traceback_text)
 
+    @mute_logger(_DISPATCHER_LOGGER, "odoo.http")
     def test_non_group_system_user_with_icp_true_never_sees_traceback(self):
         self.icp.set_param("ssi_rest_api.expose_traceback", "True")
         self.authenticate("ssi_rest_test_non_admin_http", "irrelevant")
