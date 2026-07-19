@@ -113,7 +113,7 @@ class TestSsiRestApiEndpoint(HttpCase):
         )
         self.assertTrue(endpoint.active)
         response = self.url_open(
-            f"/api/v1/x/{endpoint.path}?ids={self.partner.id}&fields=name",
+            f"/api/v1/x/{endpoint.path}?ids={self.partner.id}",
             headers=self._headers(),
         )
         self.assertEqual(response.status_code, 200)
@@ -133,7 +133,7 @@ class TestSsiRestApiEndpoint(HttpCase):
             }
         )
         response = self.url_open(
-            f"/api/v1/x/{endpoint.path}?ids={self.partner.id}&fields=name",
+            f"/api/v1/x/{endpoint.path}?ids={self.partner.id}",
             headers=self._headers(),
         )
         self.assertEqual(response.status_code, 200)
@@ -238,7 +238,7 @@ class TestSsiRestApiEndpoint(HttpCase):
             }
         )
         response = self.url_open(
-            f"/api/v1/x/{endpoint.path}?ids={self.partner.id}&fields=name",
+            f"/api/v1/x/{endpoint.path}?ids={self.partner.id}",
             headers=self._headers(),
         )
         self.assertEqual(response.status_code, 200)
