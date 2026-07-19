@@ -4,3 +4,5 @@
 
 from . import test_ir_config_parameter
 from . import test_module_structure
+from . import test_rest_dispatcher
+from . import test_rest_routing
