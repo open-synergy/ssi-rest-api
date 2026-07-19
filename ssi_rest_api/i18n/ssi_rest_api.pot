@@ -14,12 +14,30 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile_rule__profile_id
+msgid "# Profile"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api.ssi_rest_access_profile_view_form
+msgid "Access"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.actions.act_window,name:ssi_rest_api.ssi_rest_access_profile_action
+#: model:ir.ui.menu,name:ssi_rest_api.ssi_rest_access_profile_menu
+msgid "Access Profile"
+msgstr ""
+
+#. module: ssi_rest_api
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_scheme__message_needaction
 msgid "Action Needed"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile__active
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_scheme__active
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api.ssi_rest_access_profile_view_search
 msgid "Active"
 msgstr ""
 
@@ -44,6 +62,17 @@ msgid "Activity Type Icon"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model.fields.selection,name:ssi_rest_api.selection__ssi_rest_access_profile__default_effect__allow
+#: model:ir.model.fields.selection,name:ssi_rest_api.selection__ssi_rest_access_profile_rule__effect__allow
+msgid "Allow"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields.selection,name:ssi_rest_api.selection__ssi_rest_access_profile_rule__operation__any
+msgid "Any"
+msgstr ""
+
+#. module: ssi_rest_api
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_scheme__message_attachment_count
 msgid "Attachment Count"
 msgstr ""
@@ -59,8 +88,26 @@ msgid "Bearer"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model.fields.selection,name:ssi_rest_api.selection__ssi_rest_access_profile_rule__operation__call
+msgid "Call"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile__code
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_scheme__code
 msgid "Code"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.constraint,message:ssi_rest_api.constraint_ssi_rest_access_profile_code_uniq
+msgid "Code must be unique."
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_ssi_rest_access_profile_rule__http_methods
+msgid ""
+"Comma-separated HTTP methods this rule applies to (e.g. 'GET,POST'). Empty "
+"matches every method."
 msgstr ""
 
 #. module: ssi_rest_api
@@ -80,18 +127,46 @@ msgid "Could not obtain a lock on the requested record(s)."
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model.fields.selection,name:ssi_rest_api.selection__ssi_rest_access_profile_rule__operation__create
+msgid "Create"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile__create_uid
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile_rule__create_uid
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_scheme__create_uid
 msgid "Created by"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile__create_date
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile_rule__create_date
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_scheme__create_date
 msgid "Created on"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile__default_effect
+msgid "Default Effect"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields.selection,name:ssi_rest_api.selection__ssi_rest_access_profile__default_effect__deny
+#: model:ir.model.fields.selection,name:ssi_rest_api.selection__ssi_rest_access_profile_rule__effect__deny
+msgid "Deny"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_ssi_rest_access_profile__name
+msgid "Descriptive label for this access profile."
+msgstr ""
+
+#. module: ssi_rest_api
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ir_http__display_name
 #: model:ir.model.fields,field_description:ssi_rest_api.field_mixin_rest_authenticator__display_name
+#: model:ir.model.fields,field_description:ssi_rest_api.field_res_users__display_name
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile__display_name
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile_rule__display_name
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_basic__display_name
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_bearer__display_name
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_scheme__display_name
@@ -99,10 +174,35 @@ msgid "Display Name"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile_rule__effect
+msgid "Effect"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_ssi_rest_access_profile__default_effect
+msgid ""
+"Effect applied when no rule in rule_ids matches the request. Defaults to "
+"deny (fail-closed): a profile with no matching rule blocks access rather "
+"than allowing it."
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_ssi_rest_access_profile_rule__effect
+msgid "Effect applied when this rule matches the request."
+msgstr ""
+
+#. module: ssi_rest_api
 #: model:ir.model.fields,help:ssi_rest_api.field_ssi_rest_auth_scheme__sequence
 msgid ""
 "Evaluation order among active schemes: _auth_method_ssi_rest tries providers"
 " lowest sequence first."
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_ssi_rest_access_profile_rule__sequence
+msgid ""
+"Evaluation order among this profile's rules; lower runs first, first match "
+"wins. No default: every rule must state its own position explicitly."
 msgstr ""
 
 #. module: ssi_rest_api
@@ -121,6 +221,17 @@ msgid "Font awesome icon e.g. fa-tasks"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile__group_ids
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api.ssi_rest_access_profile_view_form
+msgid "Groups"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_ssi_rest_access_profile__group_ids
+msgid "Groups this profile is granted to."
+msgstr ""
+
+#. module: ssi_rest_api
 #: model:ir.model,name:ssi_rest_api.model_ir_http
 msgid "HTTP Routing"
 msgstr ""
@@ -131,8 +242,16 @@ msgid "Has Message"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile_rule__http_methods
+msgid "Http Methods"
+msgstr ""
+
+#. module: ssi_rest_api
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ir_http__id
 #: model:ir.model.fields,field_description:ssi_rest_api.field_mixin_rest_authenticator__id
+#: model:ir.model.fields,field_description:ssi_rest_api.field_res_users__id
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile__id
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile_rule__id
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_basic__id
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_bearer__id
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_scheme__id
@@ -160,16 +279,42 @@ msgid "If checked, some messages have a delivery error."
 msgstr ""
 
 #. module: ssi_rest_api
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api.ssi_rest_access_profile_view_search
+msgid "Inactive"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_ssi_rest_access_profile__active
+msgid "Inactive profiles are ignored during request evaluation."
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile_rule__invert
+msgid "Invert"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_ssi_rest_access_profile_rule__invert
+msgid ""
+"Invert the path_pattern match only, not the "
+"http_methods/model_pattern/operation match."
+msgstr ""
+
+#. module: ssi_rest_api
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_scheme__message_is_follower
 msgid "Is Follower"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile__write_uid
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile_rule__write_uid
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_scheme__write_uid
 msgid "Last Updated by"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile__write_date
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile_rule__write_date
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_scheme__write_date
 msgid "Last Updated on"
 msgstr ""
@@ -212,11 +357,17 @@ msgid "Mixin for REST Authentication Providers"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile_rule__model_pattern
+msgid "Model Pattern"
+msgstr ""
+
+#. module: ssi_rest_api
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_scheme__my_activity_date_deadline
 msgid "My Activity Deadline"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile__name
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_scheme__name
 msgid "Name"
 msgstr ""
@@ -262,6 +413,21 @@ msgid "Number of messages with delivery error"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile_rule__operation
+msgid "Operation"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_ssi_rest_access_profile_rule__operation
+msgid "Operation this rule applies to."
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile_rule__path_pattern
+msgid "Path Pattern"
+msgstr ""
+
+#. module: ssi_rest_api
 #: model_terms:ir.ui.view,arch_db:ssi_rest_api.ssi_rest_auth_scheme_view_form
 msgid "Provider"
 msgstr ""
@@ -274,7 +440,28 @@ msgstr ""
 #. module: ssi_rest_api
 #: model:ir.module.category,name:ssi_rest_api.ssi_rest_api_module_category
 #: model:ir.ui.menu,name:ssi_rest_api.menu_ssi_rest_api_root
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api.view_users_form_ssi_rest_api
 msgid "REST API"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_res_users__ssi_rest_enabled
+msgid "REST API Enabled"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model,name:ssi_rest_api.model_ssi_rest_access_profile
+msgid "REST Access Profile"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model,name:ssi_rest_api.model_ssi_rest_access_profile_rule
+msgid "REST Access Profile - Rule"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_res_users__ssi_rest_profile_ids
+msgid "REST Access Profiles"
 msgstr ""
 
 #. module: ssi_rest_api
@@ -296,6 +483,18 @@ msgid "REST Authentication Scheme"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_res_users__ssi_rest_profile_ids
+msgid ""
+"REST access profiles granted to this user, in addition to any profile "
+"granted through one of their groups."
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields.selection,name:ssi_rest_api.selection__ssi_rest_access_profile_rule__operation__read
+msgid "Read"
+msgstr ""
+
+#. module: ssi_rest_api
 #: model_terms:ir.ui.view,arch_db:ssi_rest_api.ssi_rest_auth_scheme_view_form
 msgid "Registration"
 msgstr ""
@@ -306,6 +505,20 @@ msgid "Responsible User"
 msgstr ""
 
 #. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile__rule_ids
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api.ssi_rest_access_profile_view_form
+msgid "Rules"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_ssi_rest_access_profile__rule_ids
+msgid ""
+"Rules evaluated in sequence order; the first match decides the effect, "
+"falling back to default_effect if none match."
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile_rule__sequence
 #: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_auth_scheme__sequence
 msgid "Sequence"
 msgstr ""
@@ -335,6 +548,58 @@ msgstr ""
 #. module: ssi_rest_api
 #: model:ir.model.fields,help:ssi_rest_api.field_ssi_rest_auth_scheme__activity_exception_decoration
 msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_ssi_rest_access_profile__code
+msgid "Unique technical identifier for this access profile."
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields.selection,name:ssi_rest_api.selection__ssi_rest_access_profile_rule__operation__unlink
+msgid "Unlink"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model,name:ssi_rest_api.model_res_users
+msgid "User"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,field_description:ssi_rest_api.field_ssi_rest_access_profile__user_ids
+#: model_terms:ir.ui.view,arch_db:ssi_rest_api.ssi_rest_access_profile_view_form
+msgid "Users"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_ssi_rest_access_profile__user_ids
+msgid "Users this profile is granted to."
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_res_users__ssi_rest_enabled
+msgid ""
+"Whether this user may be resolved as the authenticated identity of a "
+"ssi_rest request. Does not replace normal ACL checks."
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields.selection,name:ssi_rest_api.selection__ssi_rest_access_profile_rule__operation__write
+msgid "Write"
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_ssi_rest_access_profile_rule__path_pattern
+msgid ""
+"fnmatch-style glob matched against the request path (e.g. '/api/v1/orm/*'). "
+"Empty matches every path."
+msgstr ""
+
+#. module: ssi_rest_api
+#: model:ir.model.fields,help:ssi_rest_api.field_ssi_rest_access_profile_rule__model_pattern
+msgid ""
+"fnmatch-style glob matched against the target Odoo model technical name. "
+"Empty matches every model."
 msgstr ""
 
 #. module: ssi_rest_api
