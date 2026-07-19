@@ -11,7 +11,8 @@ inspired by (see ``lib/dispatcher.py`` module docstring for the full
 rationale).
 """
 
-from typing import NamedTuple, Optional, Sequence
+from collections.abc import Sequence
+from typing import NamedTuple
 
 from werkzeug.exceptions import HTTPException
 
@@ -28,7 +29,7 @@ class RestAuthResult(NamedTuple):
     scheme: str
     profile_ids: Sequence[int] = ()
     scopes: Sequence[str] = ()
-    expires_at: Optional[object] = None
+    expires_at: object | None = None
 
 
 class RestAuthError(HTTPException):

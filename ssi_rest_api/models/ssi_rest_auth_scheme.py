@@ -31,13 +31,11 @@ class SsiRestAuthScheme(models.Model):
     _automatically_insert_print_button = False
 
     provider_model = fields.Char(
-        string="Provider Model",
         required=True,
         help="Technical name (_name) of the mixin.rest_authenticator "
         "AbstractModel that implements this authentication scheme.",
     )
     sequence = fields.Integer(
-        string="Sequence",
         required=True,
         default=10,
         help="Evaluation order among active schemes: "
@@ -54,7 +52,10 @@ class SsiRestAuthScheme(models.Model):
         :meth:`write` and :meth:`unlink` below whenever a scheme record
         changes.
         """
-        schemes = self.sudo().search([])
+        # Registry of active schemes, realistically a handful of records
+        # (config data, not user-facing bulk data) — the whole point of
+        # this method is to load and cache all of them at once.
+        schemes = self.sudo().search([])  # pylint: disable=no-search-all
         return tuple((scheme.code, scheme.provider_model) for scheme in schemes)
 
     @api.model_create_multi

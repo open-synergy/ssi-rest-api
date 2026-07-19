@@ -7,10 +7,7 @@
          (res.groups.privilege.category_id) and res.groups.users with
          res.groups.user_ids; see base/models/res_groups.py and
          base/models/res_groups_privilege.py. -->
-    <record
-        id="res_groups_privilege_ssi_rest_auth_scheme"
-        model="res.groups.privilege"
-    >
+    <record id="res_groups_privilege_ssi_rest_auth_scheme" model="res.groups.privilege">
         <field name="name">REST Authentication Scheme</field>
         <field name="category_id" ref="ssi_rest_api_module_category" />
     </record>

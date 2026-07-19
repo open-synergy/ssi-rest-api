@@ -122,8 +122,7 @@ class IrHttp(models.AbstractModel):
             raise
         except Exception:
             _logger.exception(
-                "ssi_rest auth: unexpected error verifying credential for "
-                "scheme %s",
+                "ssi_rest auth: unexpected error verifying credential for scheme %s",
                 code,
             )
             raise InternalServerError() from None

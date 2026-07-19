@@ -74,13 +74,16 @@ class TestSsiRestAuthMethod(HttpCase):
         self.provider_cls = self.env.registry["mixin.rest_authenticator"]
 
     def test_valid_credential_authenticates_and_sets_rest_auth(self):
-        with patch.object(
-            self.provider_cls, "_rest_auth_extract", side_effect=["good-cred", None]
-        ), patch.object(
-            self.provider_cls,
-            "_rest_auth_verify",
-            side_effect=lambda credential: RestAuthResult(
-                uid=self.env.ref("base.user_admin").id, scheme="dummy1"
+        with (
+            patch.object(
+                self.provider_cls, "_rest_auth_extract", side_effect=["good-cred", None]
+            ),
+            patch.object(
+                self.provider_cls,
+                "_rest_auth_verify",
+                side_effect=lambda credential: RestAuthResult(
+                    uid=self.env.ref("base.user_admin").id, scheme="dummy1"
+                ),
             ),
         ):
             response = self.url_open("/api/v1/test-auth")
@@ -91,12 +94,15 @@ class TestSsiRestAuthMethod(HttpCase):
 
     @mute_logger(_IR_HTTP_LOGGER)
     def test_no_credential_is_401_with_combined_challenge(self):
-        with patch.object(
-            self.provider_cls, "_rest_auth_extract", side_effect=[None, None]
-        ), patch.object(
-            self.provider_cls,
-            "_rest_auth_challenge",
-            side_effect=["Dummy1Challenge", "Dummy2Challenge"],
+        with (
+            patch.object(
+                self.provider_cls, "_rest_auth_extract", side_effect=[None, None]
+            ),
+            patch.object(
+                self.provider_cls,
+                "_rest_auth_challenge",
+                side_effect=["Dummy1Challenge", "Dummy2Challenge"],
+            ),
         ):
             response = self.url_open("/api/v1/test-auth")
         self.assertEqual(response.status_code, 401)
@@ -108,11 +114,14 @@ class TestSsiRestAuthMethod(HttpCase):
 
     @mute_logger(_IR_HTTP_LOGGER)
     def test_two_credentials_at_once_is_400_multiple_credentials(self):
-        with patch.object(
-            self.provider_cls,
-            "_rest_auth_extract",
-            side_effect=["cred-a", "cred-b"],
-        ), patch.object(self.provider_cls, "_rest_auth_verify") as verify_mock:
+        with (
+            patch.object(
+                self.provider_cls,
+                "_rest_auth_extract",
+                side_effect=["cred-a", "cred-b"],
+            ),
+            patch.object(self.provider_cls, "_rest_auth_verify") as verify_mock,
+        ):
             response = self.url_open("/api/v1/test-auth")
         self.assertEqual(response.status_code, 400)
         error = response.json()["error"]
@@ -126,15 +135,18 @@ class TestSsiRestAuthMethod(HttpCase):
         # `_rest_auth_extract` returns `None`) so it is never a fallthrough
         # candidate; `dummy1`'s failed verification alone must decide the
         # response.
-        with patch.object(
-            self.provider_cls,
-            "_rest_auth_extract",
-            side_effect=["bad-cred", None],
-        ), patch.object(
-            self.provider_cls,
-            "_rest_auth_verify",
-            side_effect=RestAuthError("invalid_credential", "bad credential"),
-        ) as verify_mock:
+        with (
+            patch.object(
+                self.provider_cls,
+                "_rest_auth_extract",
+                side_effect=["bad-cred", None],
+            ),
+            patch.object(
+                self.provider_cls,
+                "_rest_auth_verify",
+                side_effect=RestAuthError("invalid_credential", "bad credential"),
+            ) as verify_mock,
+        ):
             response = self.url_open("/api/v1/test-auth")
         self.assertEqual(response.status_code, 401)
         error = response.json()["error"]
@@ -143,14 +155,17 @@ class TestSsiRestAuthMethod(HttpCase):
 
     @mute_logger(_IR_HTTP_LOGGER)
     def test_unexpected_provider_exception_is_500_not_401(self):
-        with patch.object(
-            self.provider_cls,
-            "_rest_auth_extract",
-            side_effect=["some-cred", None],
-        ), patch.object(
-            self.provider_cls,
-            "_rest_auth_verify",
-            side_effect=ZeroDivisionError("boom"),
+        with (
+            patch.object(
+                self.provider_cls,
+                "_rest_auth_extract",
+                side_effect=["some-cred", None],
+            ),
+            patch.object(
+                self.provider_cls,
+                "_rest_auth_verify",
+                side_effect=ZeroDivisionError("boom"),
+            ),
         ):
             response = self.url_open("/api/v1/test-auth")
         self.assertEqual(response.status_code, 500)
@@ -163,10 +178,15 @@ class TestSsiRestAuthMethod(HttpCase):
         # restricts to `schemes=("dummy2",)`: `dummy1` must never even be
         # asked to extract, and since `dummy2` finds nothing, the request
         # is unauthenticated (401), not silently accepted via `dummy1`.
-        with patch.object(
-            self.provider_cls, "_rest_auth_extract", side_effect=[None]
-        ) as extract_mock, patch.object(
-            self.provider_cls, "_rest_auth_challenge", return_value="Dummy2Challenge"
+        with (
+            patch.object(
+                self.provider_cls, "_rest_auth_extract", side_effect=[None]
+            ) as extract_mock,
+            patch.object(
+                self.provider_cls,
+                "_rest_auth_challenge",
+                return_value="Dummy2Challenge",
+            ),
         ):
             response = self.url_open("/api/v1/test-auth-restricted")
         self.assertEqual(response.status_code, 401)
