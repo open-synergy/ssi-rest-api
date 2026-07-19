@@ -17,7 +17,11 @@ REST API modules for SSI
 
 [//]: # (addons)
 
-This part will be replaced when running the oca-gen-addons-table script from OCA/maintainer-tools.
+Available addons
+----------------
+addon | version | maintainers | summary
+--- | --- | --- | ---
+[ssi_rest_api](ssi_rest_api/) | 19.0.1.0.0 |  | SSI REST API
 
 [//]: # (end addons)
 
