@@ -7,6 +7,7 @@ from . import test_mixin_rest_authenticator
 from . import test_module_structure
 from . import test_rest_auth
 from . import test_rest_auth_basic_bearer
+from . import test_rest_company_lang
 from . import test_rest_dispatcher
 from . import test_rest_error_envelope
 from . import test_rest_errors
