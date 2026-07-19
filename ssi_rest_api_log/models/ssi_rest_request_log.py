@@ -41,7 +41,6 @@ class SsiRestRequestLog(models.Model):
     )
     user_id = fields.Many2one(
         comodel_name="res.users",
-        string="User",
         readonly=True,
         help="Authenticated user this request ran as (the public user "
         "for an unauthenticated auth='public' request).",
